@@ -1,8 +1,5 @@
-﻿using Ardalis.Result;
-using FastEndpoints;
-using KuCloud.UseCases.Contributors.Get;
+﻿using KuCloud.UseCases.Contributors.Get;
 using KuCloud.UseCases.Contributors.Update;
-using MediatR;
 
 namespace KuCloud.Api.Contributors;
 

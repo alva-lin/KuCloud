@@ -1,7 +1,4 @@
-﻿using FastEndpoints;
-using FluentValidation;
-
-namespace KuCloud.Api.Contributors;
+﻿namespace KuCloud.Api.Contributors;
 
 /// <summary>
 ///     See: https://fast-endpoints.com/docs/validation

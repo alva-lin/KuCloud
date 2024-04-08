@@ -2,8 +2,10 @@
 using Ardalis.GuardClauses;
 using Ardalis.SharedKernel;
 using KuCloud.Core.ContributorAggregate;
+using KuCloud.Core.Interfaces;
 using KuCloud.Infrastructure.Behaviors;
 using KuCloud.Infrastructure.Data;
+using KuCloud.Infrastructure.Email;
 using KuCloud.UseCases.Contributors.Create;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,10 @@ namespace KuCloud.Infrastructure;
 
 public static class InfrastructureServiceExtensions
 {
+    private const string Development = "Development";
+    private const string Production = "Production";
+
+
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
         ConfigurationManager config,
@@ -29,7 +35,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
         services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
 
-        // AddServiceByEnvironment(services, config, logger, environmentName);
+        AddServiceByEnvironment(services, config, logger, environmentName);
 
         logger.LogInformation("{Project} services registered", "Infrastructure");
 
@@ -55,24 +61,24 @@ public static class InfrastructureServiceExtensions
         return services;
     }
 
-    // private static IServiceCollection AddServiceByEnvironment(
-    //     this IServiceCollection services,
-    //     ConfigurationManager config,
-    //     ILogger logger,
-    //     string environmentName
-    // )
-    // {
-    //     if (Environments.Development == environmentName)
-    //     {
-    //         logger.LogInformation("Development environment detected");
-    //         services.AddScoped<IEmailSender, FakeEmailSender>();
-    //     }
-    //     else
-    //     {
-    //         logger.LogInformation("Production environment detected");
-    //         services.AddScoped<IEmailSender, FakeEmailSender>();
-    //     }
-    //
-    //     return services;
-    // }
+    private static IServiceCollection AddServiceByEnvironment(
+        this IServiceCollection services,
+        ConfigurationManager config,
+        ILogger logger,
+        string environmentName
+    )
+    {
+        if (Development == environmentName)
+        {
+            logger.LogInformation("Development environment detected");
+            services.AddScoped<IEmailSender, FakeEmailSender>();
+        }
+        else if (Production == environmentName)
+        {
+            logger.LogInformation("Production environment detected");
+            services.AddScoped<IEmailSender, FakeEmailSender>();
+        }
+
+        return services;
+    }
 }

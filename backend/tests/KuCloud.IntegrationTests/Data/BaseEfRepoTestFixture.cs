@@ -3,6 +3,7 @@ using KuCloud.Core.ContributorAggregate;
 using KuCloud.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 
 namespace KuCloud.IntegrationTests.Data;
@@ -14,9 +15,10 @@ public abstract class BaseEfRepoTestFixture
     protected BaseEfRepoTestFixture()
     {
         var options = CreateNewContextOptions();
+        var fakeLogger = Substitute.For<ILogger<AppDbContext>>();
         var fakeEventDispatcher = Substitute.For<IDomainEventDispatcher>();
 
-        DbContext = new AppDbContext(options, fakeEventDispatcher);
+        DbContext = new AppDbContext(options, fakeLogger, fakeEventDispatcher);
     }
 
     protected static DbContextOptions<AppDbContext> CreateNewContextOptions()
@@ -30,7 +32,7 @@ public abstract class BaseEfRepoTestFixture
         // Create a new options instance telling the context to use an
         // InMemory database and the new service provider.
         var builder = new DbContextOptionsBuilder<AppDbContext>();
-        builder.UseInMemoryDatabase("cleanarchitecture")
+        builder.UseInMemoryDatabase("KuCloud.IntegrationTests")
             .UseInternalServiceProvider(serviceProvider);
 
         return builder.Options;

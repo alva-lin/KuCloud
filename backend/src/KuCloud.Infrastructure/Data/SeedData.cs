@@ -1,6 +1,7 @@
 ﻿using KuCloud.Core.ContributorAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace KuCloud.Infrastructure.Data;
 
@@ -11,13 +12,14 @@ public static class SeedData
 
     public static void Initialize(IServiceProvider serviceProvider)
     {
-        using (var dbContext = new AppDbContext(
-                   serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null))
-        {
-            if (dbContext.Contributors.Any()) return; // DB has been seeded
+        using var dbContext = new AppDbContext(
+            serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(),
+            serviceProvider.GetRequiredService<ILogger<AppDbContext>>(),
+            null
+        );
+        if (dbContext.Contributors.Any()) return; // DB has been seeded
 
-            PopulateTestData(dbContext);
-        }
+        PopulateTestData(dbContext);
     }
 
     public static void PopulateTestData(AppDbContext dbContext)

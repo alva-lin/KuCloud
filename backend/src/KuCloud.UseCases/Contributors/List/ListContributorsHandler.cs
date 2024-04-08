@@ -10,7 +10,7 @@ public class ListContributorsHandler(IReadRepository<Contributor> repository)
     {
         var data = await repository.ListAsync(cancellationToken);
 
-        var result = data.Select(e => new ContributorDto(e.Id, e.Name, null));
+        var result = data.Select(e => new ContributorDto(e.Id, e.Name, e.PhoneNumber?.Number));
 
         return Result.Success(result);
     }

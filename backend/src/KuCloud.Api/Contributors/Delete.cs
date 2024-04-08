@@ -1,7 +1,4 @@
-﻿using Ardalis.Result;
-using FastEndpoints;
-using KuCloud.UseCases.Contributors.Delete;
-using MediatR;
+﻿using KuCloud.UseCases.Contributors.Delete;
 
 namespace KuCloud.Api.Contributors;
 

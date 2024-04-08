@@ -3,7 +3,7 @@ using Ardalis.SharedKernel;
 
 namespace KuCloud.Core.ContributorAggregate;
 
-public class Contributor(string name) : EntityBase, IAggregateRoot
+public class Contributor(string name) : BasicEntity<int>, IAggregateRoot
 {
     // Example of validating primary constructor inputs
     // See: https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/primary-constructors#initialize-base-class
@@ -22,25 +22,15 @@ public class Contributor(string name) : EntityBase, IAggregateRoot
     }
 }
 
-public class PhoneNumber : ValueObject
+public class PhoneNumber(
+    string countryCode,
+    string number,
+    string? extension)
+    : ValueObject
 {
-    protected PhoneNumber()
-    {
-
-    }
-
-    public PhoneNumber(string countryCode,
-        string number,
-        string? extension)
-    {
-        CountryCode = countryCode;
-        Number = number;
-        Extension = extension;
-    }
-
-    public string CountryCode { get; } = string.Empty;
-    public string Number { get; } = string.Empty;
-    public string? Extension { get; } = string.Empty;
+    public string CountryCode { get; init; } = countryCode;
+    public string Number { get; init; } = number;
+    public string? Extension { get; init; } = extension;
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

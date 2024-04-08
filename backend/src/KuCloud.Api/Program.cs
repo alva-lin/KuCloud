@@ -1,10 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 using Ardalis.ListStartupServices;
-using FastEndpoints;
 using FastEndpoints.Swagger;
 using KuCloud.Api;
 using KuCloud.Infrastructure;
-using KuCloud.Infrastructure.Data;
 using Serilog;
 using Serilog.Extensions.Logging;
 

@@ -1,6 +1,4 @@
-﻿using FastEndpoints;
-using KuCloud.UseCases.Contributors.Create;
-using MediatR;
+﻿using KuCloud.UseCases.Contributors.Create;
 
 namespace KuCloud.Api.Contributors;
 

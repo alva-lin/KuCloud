@@ -1,4 +1,4 @@
-﻿namespace KuCloud.Infrastructure.Data.Config;
+﻿namespace KuCloud.Infrastructure.Data;
 
 public static class DataSchemaConstants
 {
