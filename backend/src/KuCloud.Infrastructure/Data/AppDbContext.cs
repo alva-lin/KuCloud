@@ -27,8 +27,6 @@ public sealed class AppDbContext : DbContext
         ChangeTracker.Tracked += UpdateAuditInfo;
     }
 
-    public DbSet<Contributor> Contributors => Set<Contributor>();
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

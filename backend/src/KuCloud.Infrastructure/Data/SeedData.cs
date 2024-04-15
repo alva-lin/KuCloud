@@ -7,9 +7,6 @@ namespace KuCloud.Infrastructure.Data;
 
 public static class SeedData
 {
-    public static readonly Contributor Contributor1 = new("Ardalis");
-    public static readonly Contributor Contributor2 = new("Snowfrog");
-
     public static void Initialize(IServiceProvider serviceProvider)
     {
         using var dbContext = new AppDbContext(
@@ -17,18 +14,15 @@ public static class SeedData
             serviceProvider.GetRequiredService<ILogger<AppDbContext>>(),
             null
         );
-        if (dbContext.Contributors.Any()) return; // DB has been seeded
+        if (dbContext.Folders.Any()) return; // DB has been seeded
 
         PopulateTestData(dbContext);
     }
 
     public static void PopulateTestData(AppDbContext dbContext)
     {
-        foreach (var contributor in dbContext.Contributors) dbContext.Remove(contributor);
+        foreach (var folder in dbContext.Folders) dbContext.Remove(folder);
         dbContext.SaveChanges();
-
-        dbContext.Contributors.Add(Contributor1);
-        dbContext.Contributors.Add(Contributor2);
 
         dbContext.SaveChanges();
     }
