@@ -1,23 +1,8 @@
 ﻿using KuCloud.Core;
-using KuCloud.Core.ContributorAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace KuCloud.Infrastructure.Data.Config;
-
-public class ContributorConfiguration : BasicEntityConfiguration<Contributor, int>
-{
-    public override void Configure(EntityTypeBuilder<Contributor> builder)
-    {
-        base.Configure(builder);
-
-        builder.Property(p => p.Name)
-            .HasMaxLength(DataSchemaConstants.DefaultNameLength)
-            .IsRequired();
-
-        builder.OwnsOne(e => e.PhoneNumber).ToJson();
-    }
-}
 
 public abstract class BasicEntityConfiguration<TEntity, TId> : IEntityTypeConfiguration<TEntity>
     where TEntity: BasicEntity<TId>

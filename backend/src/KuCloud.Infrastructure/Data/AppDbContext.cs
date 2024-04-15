@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Ardalis.SharedKernel;
 using KuCloud.Core;
-using KuCloud.Core.ContributorAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
@@ -9,7 +8,7 @@ using SmartEnum.EFCore;
 
 namespace KuCloud.Infrastructure.Data;
 
-public sealed class AppDbContext : DbContext
+public sealed partial class AppDbContext : DbContext
 {
     private readonly ILogger<AppDbContext> _logger;
     private readonly IDomainEventDispatcher? _dispatcher;

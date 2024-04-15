@@ -63,13 +63,13 @@ public static class AppDbContextExtensions
             .Where(type => type is {IsClass: true, IsAbstract: false})
             .Where(type => type.IsAssignableTo(typeof(BasicEntity<>)))
             .Where(type => !configuredTypes.Contains(type))
-            .Distinct();
+            .Distinct()
+            .ToList();
         foreach (var tEntity in entityTypes)
         {
             var tKey = tEntity.BaseType!.GetGenericArguments().First();
 
             var tConfig = typeof(BasicEntityConfiguration<,>).MakeGenericType(tEntity, tKey);
-
 
             var config = Activator.CreateInstance(tConfig)!;
 

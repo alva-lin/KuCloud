@@ -1,9 +1,6 @@
 ﻿using Ardalis.SharedKernel;
-using FluentAssertions;
 using KuCloud.Core.ContributorAggregate;
 using KuCloud.UseCases.Contributors.Create;
-using NSubstitute;
-using Xunit;
 
 namespace KuCloud.UnitTests.UseCases.Contributors;
 

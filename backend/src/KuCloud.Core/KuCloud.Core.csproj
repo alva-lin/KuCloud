@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="StorageAggregate\Entities\" />
     <Folder Include="StorageAggregate\Events\" />
     <Folder Include="StorageAggregate\Handlers\" />
     <Folder Include="StorageAggregate\Models\" />

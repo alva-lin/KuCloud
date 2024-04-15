@@ -1,5 +1,4 @@
 ﻿using KuCloud.Core.ContributorAggregate;
-using Xunit;
 
 namespace KuCloud.UnitTests.Core.ContributorAggregate;
 
