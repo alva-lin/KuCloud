@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
 using Ardalis.GuardClauses;
 using Ardalis.SharedKernel;
-using KuCloud.Core.Domains.ContributorAggregate;
+using KuCloud.Core.Domains.StorageAggregate;
 using KuCloud.Core.Interfaces;
 using KuCloud.Infrastructure.Behaviors;
 using KuCloud.Infrastructure.Data;
 using KuCloud.Infrastructure.Email;
-using KuCloud.UseCases.Contributors.Create;
+using KuCloud.UseCases.Storages.Folders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -46,8 +46,8 @@ public static class InfrastructureServiceExtensions
     {
         var mediatRAssemblies = new[]
         {
-            Assembly.GetAssembly(typeof(Contributor)),             // Core
-            Assembly.GetAssembly(typeof(CreateContributorCommand)) // UseCases
+            Assembly.GetAssembly(typeof(Folder)),             // Core
+            Assembly.GetAssembly(typeof(CreateFolderCommand)) // UseCases
         };
 
         services.AddMediatR(cfg =>
