@@ -1,4 +1,4 @@
-﻿using KuCloud.Core.ContributorAggregate;
+﻿using KuCloud.Core.StorageAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -21,8 +21,33 @@ public static class SeedData
 
     public static void PopulateTestData(AppDbContext dbContext)
     {
-        foreach (var folder in dbContext.Folders) dbContext.Remove(folder);
+        AddStorageTestData(dbContext);
+
         dbContext.SaveChanges();
+    }
+
+    private static void AddStorageTestData(AppDbContext dbContext)
+    {
+        dbContext.FileNodes.ExecuteDelete();
+        dbContext.Folders.ExecuteDelete();
+
+        var folder = new Folder("Root", null);
+        dbContext.Folders.Add(folder);
+
+        var folder1 = new Folder("Folder1", folder);
+        dbContext.Folders.Add(folder1);
+
+        var folder2 = new Folder("Folder2", folder);
+        dbContext.Folders.Add(folder2);
+
+        var file1 = new FileNode("file1.txt", folder1, "text/plain", 0L);
+        dbContext.FileNodes.Add(file1);
+
+        var file2 = new FileNode("file2.txt", folder1, "text/plain", 0L);
+        dbContext.FileNodes.Add(file2);
+
+        var file3 = new FileNode("file3.txt", folder2, "text/plain", 0L);
+        dbContext.FileNodes.Add(file3);
 
         dbContext.SaveChanges();
     }
