@@ -1,5 +1,5 @@
 ﻿using Ardalis.SharedKernel;
-using KuCloud.Core.ContributorAggregate;
+using KuCloud.Core.Domains.ContributorAggregate;
 using KuCloud.UseCases.Contributors.Create;
 
 namespace KuCloud.UnitTests.UseCases.Contributors;

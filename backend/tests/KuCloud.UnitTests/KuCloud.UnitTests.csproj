@@ -28,4 +28,8 @@
     <ProjectReference Include="..\KuCloud.TestShared\KuCloud.TestShared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Core\Domains\" />
+  </ItemGroup>
+
 </Project>

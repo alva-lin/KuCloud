@@ -1,6 +1,6 @@
-﻿using KuCloud.Core.ContributorAggregate;
+﻿using KuCloud.Core.Domains.ContributorAggregate;
 
-namespace KuCloud.UnitTests.Core.ContributorAggregate;
+namespace KuCloud.UnitTests.Core.Domains.ContributorAggregate;
 
 public class ContributorConstructor
 {

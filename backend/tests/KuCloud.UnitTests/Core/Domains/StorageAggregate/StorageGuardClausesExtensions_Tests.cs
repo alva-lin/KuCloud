@@ -1,7 +1,7 @@
 using Ardalis.GuardClauses;
-using KuCloud.Core.StorageAggregate;
+using KuCloud.Core.Domains.StorageAggregate;
 
-namespace KuCloud.UnitTests.Core.StorageAggregate;
+namespace KuCloud.UnitTests.Core.Domains.StorageAggregate;
 
 public class StorageGuardClausesExtensions_Tests
 {

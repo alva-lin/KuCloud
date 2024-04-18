@@ -1,5 +1,5 @@
-﻿using KuCloud.Core.ContributorAggregate;
-using KuCloud.Core.ContributorAggregate.Specifications;
+﻿using KuCloud.Core.Domains.ContributorAggregate;
+using KuCloud.Core.Domains.ContributorAggregate.Specifications;
 
 namespace KuCloud.UseCases.Contributors.Get;
 

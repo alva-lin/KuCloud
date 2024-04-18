@@ -32,6 +32,8 @@ public class AuditInfo : ValueObject
 
     public void SetCreateInfo(DateTime? creationTime = null)
     {
+        Creator = "System";
+        CreatorId = "System";
         CreationTime = creationTime ?? DateTime.UtcNow;
         ModifiedTime = null;
         IsDelete = false;

@@ -1,7 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using Ardalis.SharedKernel;
 
-namespace KuCloud.Core.ContributorAggregate;
+namespace KuCloud.Core.Domains.ContributorAggregate;
 
 public class Contributor(string name) : BasicEntity<int>, IAggregateRoot
 {

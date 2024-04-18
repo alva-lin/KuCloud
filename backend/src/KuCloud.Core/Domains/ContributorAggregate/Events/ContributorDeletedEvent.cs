@@ -1,6 +1,6 @@
 ﻿using Ardalis.SharedKernel;
 
-namespace KuCloud.Core.ContributorAggregate.Events;
+namespace KuCloud.Core.Domains.ContributorAggregate.Events;
 
 /// <summary>
 ///     A domain event that is dispatched whenever a contributor is deleted.

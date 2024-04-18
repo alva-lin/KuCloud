@@ -1,6 +1,6 @@
 using Ardalis.SmartEnum;
 
-namespace KuCloud.Core.StorageAggregate;
+namespace KuCloud.Core.Domains.StorageAggregate;
 
 public sealed class StorageType(string name, int value) : SmartEnum<StorageType>(name, value)
 {

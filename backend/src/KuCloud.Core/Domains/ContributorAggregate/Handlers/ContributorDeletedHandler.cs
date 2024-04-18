@@ -1,9 +1,9 @@
-﻿using KuCloud.Core.ContributorAggregate.Events;
+﻿using KuCloud.Core.Domains.ContributorAggregate.Events;
 using KuCloud.Core.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace KuCloud.Core.ContributorAggregate.Handlers;
+namespace KuCloud.Core.Domains.ContributorAggregate.Handlers;
 
 /// <summary>
 ///     NOTE: Internal because ContributorDeleted is also marked as internal.

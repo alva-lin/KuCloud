@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Ardalis.GuardClauses;
 
-namespace KuCloud.Core.StorageAggregate;
+namespace KuCloud.Core.Domains.StorageAggregate;
 
 public static class StorageGuardClausesExtensions
 {

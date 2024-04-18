@@ -1,4 +1,4 @@
-using KuCloud.Core.StorageAggregate;
+using KuCloud.Core.Domains.StorageAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -32,8 +32,6 @@ public sealed class FolderConfiguration : BasicEntityConfiguration<Folder, long>
 {
     public override void Configure(EntityTypeBuilder<Folder> builder)
     {
-        // base.Configure(builder);
-
         builder.HasMany(e => e.Children)
             .WithOne(e => e.Parent)
             .IsRequired(false);
@@ -44,8 +42,6 @@ public sealed class FileConfiguration : BasicEntityConfiguration<FileNode, long>
 {
     public override void Configure(EntityTypeBuilder<FileNode> builder)
     {
-        // base.Configure(builder);
-
         builder.Property(e => e.ContentType)
             .IsRequired()
             .HasMaxLength(DataSchemaConstants.DefaultNameLength);

@@ -1,25 +1,21 @@
-﻿// using KuCloud.Core.ContributorAggregate;
-// using Xunit;
-//
-// namespace KuCloud.IntegrationTests.Data;
-//
-// public class EfRepositoryAdd : BaseEfRepoTestFixture
-// {
-//     [Fact]
-//     public async Task AddsContributorAndSetsId()
-//     {
-//         var testContributorName = "testContributor";
-//         var testContributorStatus = ContributorStatus.NotSet;
-//         var repository = GetRepository();
-//         var contributor = new Contributor(testContributorName);
-//
-//         await repository.AddAsync(contributor);
-//
-//         var newContributor = (await repository.ListAsync())
-//             .FirstOrDefault();
-//
-//         Assert.Equal(testContributorName, newContributor?.Name);
-//         Assert.Equal(testContributorStatus, newContributor?.Status);
-//         Assert.True(newContributor?.Id > 0);
-//     }
-// }
+﻿using KuCloud.Core.Domains.StorageAggregate;
+
+namespace KuCloud.IntegrationTests.Data;
+
+public class EfRepositoryAdd : BaseEfRepoTestFixture
+{
+    [Fact]
+    public async Task AddFolderAndSetsId()
+    {
+        var repository = GetRepository();
+        var folder = new Folder("testFolder", null);
+
+        await repository.AddAsync(folder);
+
+        var newFolder = (await repository.ListAsync())
+            .FirstOrDefault();
+
+        Assert.Equal(folder.Name, newFolder?.Name);
+        Assert.True(newFolder?.Id > 0);
+    }
+}

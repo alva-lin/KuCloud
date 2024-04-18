@@ -1,5 +1,5 @@
-﻿using KuCloud.Core.ContributorAggregate;
-using KuCloud.Core.ContributorAggregate.Events;
+﻿using KuCloud.Core.Domains.ContributorAggregate;
+using KuCloud.Core.Domains.ContributorAggregate.Events;
 
 namespace KuCloud.UseCases.Contributors.Delete;
 

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Ardalis.GuardClauses;
 using Ardalis.SharedKernel;
-using KuCloud.Core.ContributorAggregate;
+using KuCloud.Core.Domains.ContributorAggregate;
 using KuCloud.Core.Interfaces;
 using KuCloud.Infrastructure.Behaviors;
 using KuCloud.Infrastructure.Data;

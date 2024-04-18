@@ -1,4 +1,4 @@
-﻿using KuCloud.Core.StorageAggregate;
+﻿using KuCloud.Core.Domains.StorageAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

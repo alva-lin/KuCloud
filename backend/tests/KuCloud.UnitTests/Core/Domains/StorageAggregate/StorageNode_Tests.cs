@@ -1,6 +1,6 @@
-using KuCloud.Core.StorageAggregate;
+using KuCloud.Core.Domains.StorageAggregate;
 
-namespace KuCloud.UnitTests.Core.StorageAggregate;
+namespace KuCloud.UnitTests.Core.Domains.StorageAggregate;
 
 public sealed class StorageNode_Tests : BasicTest
 {

@@ -1,5 +1,4 @@
-using KuCloud.Core.ContributorAggregate;
-using KuCloud.Core.StorageAggregate;
+using KuCloud.Core.Domains.StorageAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace KuCloud.Infrastructure.Data;

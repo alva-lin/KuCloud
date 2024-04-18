@@ -1,6 +1,6 @@
 ﻿using Ardalis.Specification;
 
-namespace KuCloud.Core.ContributorAggregate.Specifications;
+namespace KuCloud.Core.Domains.ContributorAggregate.Specifications;
 
 public class ContributorByIdSpec : Specification<Contributor>
 {

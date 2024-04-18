@@ -1,6 +1,6 @@
 ﻿using Ardalis.SmartEnum;
 
-namespace KuCloud.Core.ContributorAggregate;
+namespace KuCloud.Core.Domains.ContributorAggregate;
 
 public sealed class ContributorStatus(string name, int value) : SmartEnum<ContributorStatus>(name, value)
 {

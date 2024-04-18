@@ -1,4 +1,4 @@
-﻿using KuCloud.Core.ContributorAggregate;
+﻿using KuCloud.Core.Domains.ContributorAggregate;
 
 namespace KuCloud.UseCases.Contributors.Create;
 

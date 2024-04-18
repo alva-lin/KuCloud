@@ -12,10 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Domains\" />
     <Folder Include="Services\" />
-    <Folder Include="StorageAggregate\Events\" />
-    <Folder Include="StorageAggregate\Handlers\" />
-    <Folder Include="StorageAggregate\Models\" />
   </ItemGroup>
 
 </Project>
