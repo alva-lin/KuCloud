@@ -25,6 +25,8 @@ builder.Host.UseSerilog((_, config) =>
 var microsoftLogger = new SerilogLoggerFactory(logger)
     .CreateLogger<Program>();
 
+builder.Services.AddSingleton<AppStatusMonitor>();
+
 // Configure Web Behavior
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
