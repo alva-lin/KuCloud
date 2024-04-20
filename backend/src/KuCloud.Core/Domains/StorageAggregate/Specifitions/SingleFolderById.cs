@@ -7,5 +7,7 @@ public sealed class SingleFolderById : Specification<Folder>, ISingleResultSpeci
     public SingleFolderById(long id)
     {
         Query.Where(x => x.Id == id);
+
+        Query.Include(e => e.Children);
     }
 }

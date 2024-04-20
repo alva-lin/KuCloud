@@ -1,4 +1,5 @@
 using System.Net;
+using Ardalis.GuardClauses;
 using FluentValidation.Results;
 
 namespace KuCloud.Api.Extensions;
@@ -71,7 +72,7 @@ public static class EndpointExtensions
     }
 
     public static void CheckResult<TRequest, TResponse, T>(this Endpoint<TRequest, TResponse> endpoint,
-        Result<T> result) where TRequest : notnull
+       [ValidatedNotNull] Result<T> result) where TRequest : notnull
     {
         endpoint.AddErrors(result);
 

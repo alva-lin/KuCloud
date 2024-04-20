@@ -16,6 +16,7 @@ public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
 
         Parent = parent;
         ParentId = parent?.Id;
+        Path = $"{parent?.Path ?? string.Empty}/{name}";
         parent?.AddChild(this);
     }
 
@@ -27,7 +28,7 @@ public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
 
     public long? ParentId { get; set; }
 
-    public string Path => Parent?.Path + "/" + Name;
+    public string Path { get; private set; } = null!;
 
     public bool IsRoot => Parent == null;
 }
