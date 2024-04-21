@@ -1,5 +1,3 @@
-using Ardalis.GuardClauses;
-
 namespace KuCloud.Core.Domains.StorageAggregate;
 
 public sealed class FileNode : StorageNode

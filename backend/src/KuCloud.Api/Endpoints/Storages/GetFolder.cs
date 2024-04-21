@@ -1,6 +1,6 @@
 using KuCloud.Api.Extensions;
 using KuCloud.Core.Domains.StorageAggregate;
-using KuCloud.UseCases.Storages.Folders;
+using KuCloud.UseCases.Storages;
 
 namespace KuCloud.Api.Endpoints.Storages;
 
@@ -27,6 +27,6 @@ public class GetFolder(IMediator mediator) : Endpoint<GetFolderRequest, StorageN
         var result = await mediator.Send(new GetFolderQuery(req.Id), ct);
 
         this.CheckResult(result);
-        await SendAsync(new StorageNodeDto(result.Value), cancellation: ct);
+        await SendAsync(StorageNodeDto.Create(result.Value), cancellation: ct);
     }
 }

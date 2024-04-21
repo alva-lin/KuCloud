@@ -16,11 +16,16 @@ public abstract class BasicEntityConfiguration<TEntity, TId> : IEntityTypeConfig
         builder.HasKey(e => e.Id);
         builder.HasQueryFilter(e => !e.AuditInfo.IsDelete);
 
-        builder.Property(e => e.Id).ValueGeneratedOnAdd();
+        builder.Property(e => e.Id)
+            .HasColumnOrder(1)
+            .ValueGeneratedOnAdd();
 
         builder.OwnsOne(e => e.AuditInfo, auditInfoBuilder =>
         {
             auditInfoBuilder.ToJson();
+
+            auditInfoBuilder.Property(e => e.IsDelete)
+                .IsRequired();
 
             auditInfoBuilder.Property(e => e.Creator)
                 .HasMaxLength(DataSchemaConstants.DefaultNameLength)
@@ -34,10 +39,6 @@ public abstract class BasicEntityConfiguration<TEntity, TId> : IEntityTypeConfig
                 .IsRequired();
 
             auditInfoBuilder.Property(e => e.ModifiedTime);
-
-            auditInfoBuilder.Property(e => e.IsDelete)
-                .IsRequired();
         });
-
     }
 }

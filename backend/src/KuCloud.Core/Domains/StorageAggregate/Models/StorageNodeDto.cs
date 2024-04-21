@@ -3,7 +3,7 @@ using Ardalis.SmartEnum.SystemTextJson;
 
 namespace KuCloud.Core.Domains.StorageAggregate;
 
-public record StorageNodeDto
+public abstract record StorageNodeDto
 {
     public long Id { get; set; }
 
@@ -12,33 +12,17 @@ public record StorageNodeDto
 
     public string Name { get; set; } = null!;
 
-    public string Path { get; set; } = null!;
-
-    public List<StorageNodeDto>? Children { get; set; }
-
-    public Dictionary<string, object> Attributes { get; } = new();
-
-    public StorageNodeDto(StorageNode node, bool ignoreChildren = false)
+    protected StorageNodeDto(StorageNode node)
     {
         Id = node.Id;
         Type = node.Type;
-
         Name = node.Name;
-        Path = node.Path;
-
-        switch (node)
-        {
-            case FileNode file:
-                Attributes.Add("ContentType", file.ContentType);
-                Attributes.Add("Size", file.Size);
-                break;
-            case Folder folder:
-                if (!ignoreChildren)
-                {
-                    Children = folder.Children.Select(x => new StorageNodeDto(x, ignoreChildren: true)).ToList();
-                }
-
-                break;
-        }
     }
+
+    public static StorageNodeDto Create(StorageNode node, bool ignoreChildren = false) => node switch
+    {
+        FileNode file => new FileNodeDto(file),
+        Folder folder => new FolderDto(folder, ignoreChildren),
+        _ => throw new NotSupportedException()
+    };
 }

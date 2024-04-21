@@ -1,13 +1,12 @@
 using Ardalis.Result;
 using Ardalis.SharedKernel;
 using KuCloud.Core.Domains.StorageAggregate;
-using KuCloud.Core.Domains.StorageAggregate.Specifitions;
 using KuCloud.UnitTests.Core.Domains.StorageAggregate;
-using KuCloud.UseCases.Storages.Folders;
+using KuCloud.UseCases.Storages;
 
-namespace KuCloud.UnitTests.UseCases.Storages.Folders;
+namespace KuCloud.UnitTests.UseCases.Storages;
 
-public class GetFolderHandler_Tests : BasicTest
+public sealed class GetFolderHandler_Tests : BasicTest
 {
     private readonly IRepository<Folder> _repository;
     private readonly GetFolderHandler _handler;
@@ -45,7 +44,7 @@ public class GetFolderHandler_Tests : BasicTest
     {
         // Arrange
         var query = CreateQuery(1);
-        var mockFolder = StorageNode_Tests.CreateFolder();
+        var mockFolder = Folder_Tests.CreateFolder();
         _repository.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>()).Returns(mockFolder);
 
         // Act

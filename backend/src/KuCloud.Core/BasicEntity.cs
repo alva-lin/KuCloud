@@ -1,9 +1,9 @@
-﻿using Ardalis.SharedKernel;
-
-namespace KuCloud.Core;
+﻿namespace KuCloud.Core;
 
 public class AuditInfo : ValueObject
 {
+    public bool IsDelete { get; private set; }
+
     public string Creator { get; private set; } = null!;
 
     public string CreatorId { get; private set; } = null!;
@@ -12,7 +12,7 @@ public class AuditInfo : ValueObject
 
     public DateTime? ModifiedTime { get; private set; }
 
-    public bool IsDelete { get; private set; }
+    public DateTime? DeletionTime { get; private set; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -44,9 +44,9 @@ public class AuditInfo : ValueObject
         ModifiedTime = modifiedTime ?? DateTime.UtcNow;
     }
 
-    public void SetDeleteInfo(DateTime? modifiedTime = null)
+    public void SetDeleteInfo(DateTime? deletionTime = null)
     {
-        ModifiedTime = modifiedTime ?? DateTime.UtcNow;
+        DeletionTime = deletionTime ?? DateTime.UtcNow;
         IsDelete = true;
     }
 }

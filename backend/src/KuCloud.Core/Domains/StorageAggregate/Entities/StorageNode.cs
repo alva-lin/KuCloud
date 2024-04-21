@@ -1,8 +1,6 @@
-using Ardalis.GuardClauses;
-using Ardalis.SharedKernel;
-
 namespace KuCloud.Core.Domains.StorageAggregate;
 
+// TODO - 是否需要将 Folder 和 FileNode 分开，不该继承同一个基类
 public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
 {
     // EF Core required
@@ -14,10 +12,7 @@ public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
 
         Name = Guard.Against.CheckInvalidPath(name);
 
-        Parent = parent;
-        ParentId = parent?.Id;
-        Path = $"{parent?.Path ?? string.Empty}/{name}";
-        parent?.AddChild(this);
+        SetParent(parent);
     }
 
     public StorageType Type { get; set; } = null!;
@@ -28,7 +23,35 @@ public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
 
     public long? ParentId { get; set; }
 
-    public string Path { get; private set; } = null!;
-
     public bool IsRoot => Parent == null;
+
+    public void SetParent(Folder? parent)
+    {
+        if (parent == Parent)
+        {
+            return;
+        }
+
+        if (parent is not null && this is Folder folder)
+        {
+            if (parent == folder)
+            {
+                // TODO - 捕捉异常，然后返回为正常的信息
+                throw new InvalidOperationException("Cannot set parent to self");
+            }
+
+            if (folder.IsAncestorOf(parent))
+            {
+                throw new InvalidOperationException("Cannot set parent to a descendant");
+            }
+        }
+
+        // remove from old parent
+        Parent?.RemoveChild(this);
+
+        // set new parent
+        ParentId = parent?.Id;
+        Parent = parent;
+        Parent?.AddChild(this);
+    }
 }

@@ -1,6 +1,5 @@
 using KuCloud.Api.Extensions;
 using KuCloud.UseCases.Storages;
-using KuCloud.UseCases.Storages.Folders;
 
 namespace KuCloud.Api.Endpoints.Storages;
 

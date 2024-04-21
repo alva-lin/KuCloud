@@ -3,7 +3,7 @@ using KuCloud.Core.Domains.StorageAggregate;
 
 namespace KuCloud.UnitTests.Core.Domains.StorageAggregate;
 
-public class StorageGuardClausesExtensions_Tests
+public sealed class StorageGuardClausesExtensions_Tests
 {
     [Fact]
     public void CheckInvalidPath_WithInvalidPath_ShouldThrowArgumentException()

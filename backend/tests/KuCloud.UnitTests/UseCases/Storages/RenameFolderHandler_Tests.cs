@@ -1,13 +1,13 @@
 using Ardalis.Result;
 using Ardalis.SharedKernel;
 using KuCloud.Core.Domains.StorageAggregate;
-using KuCloud.Core.Domains.StorageAggregate.Specifitions;
-using KuCloud.UseCases.Storages.Folders;
+using KuCloud.UnitTests.Core.Domains.StorageAggregate;
+using KuCloud.UseCases.Storages;
 using Microsoft.Extensions.Logging;
 
-namespace KuCloud.UnitTests.UseCases.Storages.Folders;
+namespace KuCloud.UnitTests.UseCases.Storages;
 
-public class RenameFolderHandler_Tests : BasicTest
+public sealed class RenameFolderHandler_Tests : BasicTest
 {
     private readonly IRepository<Folder> _repos;
     private readonly RenameFolderHandler _handler;
@@ -33,9 +33,10 @@ public class RenameFolderHandler_Tests : BasicTest
     [Fact]
     public async Task Folder_Rename_Success()
     {
-        var folderId = 1;
+        const int folderId = 1;
+        var mockParent = Folder_Tests.CreateFolder(null);
+        var mockFolder = Folder_Tests.CreateFolder(mockParent);
         var command = CreateCommand(folderId);
-        var mockFolder = new Folder("Folder", null);
 
         _repos.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
             .Returns(mockFolder);
@@ -49,7 +50,7 @@ public class RenameFolderHandler_Tests : BasicTest
     [Fact]
     public async Task Folder_Rename_FolderNotFound()
     {
-        var folderId = 1;
+        const int folderId = 1;
         var command = CreateCommand(folderId);
 
         _repos.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
@@ -59,6 +60,42 @@ public class RenameFolderHandler_Tests : BasicTest
 
         result.IsSuccess.Should().BeFalse();
         result.Status.Should().Be(ResultStatus.NotFound);
+        await _repos.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Folder_Rename_FolderNameIsTheSame()
+    {
+        const int folderId = 1;
+        var mockFolder = Folder_Tests.CreateFolder(null);
+        var command = CreateCommand(folderId) with { Name = mockFolder.Name };
+
+        _repos.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
+            .Returns(mockFolder);
+
+        var result = await _handler.Handle(command, default);
+
+        result.IsSuccess.Should().BeTrue();
+
+        await _repos.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Folder_Rename_FolderNameAlreadyExists()
+    {
+        var mockParent = Folder_Tests.CreateFolder(null);
+        var mockSon = Folder_Tests.CreateFolder(mockParent);
+        var mockFolder = Folder_Tests.CreateFolder(mockParent);
+
+        var command = CreateCommand(0L) with { Name = mockSon.Name };
+
+        _repos.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
+            .Returns(mockFolder, mockParent);
+
+        var result = await _handler.Handle(command, default);
+
+        result.IsSuccess.Should().BeFalse();
+        result.Status.Should().Be(ResultStatus.Conflict);
         await _repos.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
     }
 }

@@ -22,12 +22,36 @@ namespace KuCloud.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("KuCloud.Core.Domains.StorageAggregate.FolderNesting", b =>
+                {
+                    b.Property<long>("AncestorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("ancestor_id");
+
+                    b.Property<long>("DescendantId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("descendant_id");
+
+                    b.Property<int>("Depth")
+                        .HasColumnType("integer")
+                        .HasColumnName("depth");
+
+                    b.HasKey("AncestorId", "DescendantId")
+                        .HasName("pk_folder_nesting");
+
+                    b.HasIndex("DescendantId")
+                        .HasDatabaseName("ix_folder_nesting_descendant_id");
+
+                    b.ToTable("folder_nesting", (string)null);
+                });
+
             modelBuilder.Entity("KuCloud.Core.Domains.StorageAggregate.StorageNode", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("id");
+                        .HasColumnName("id")
+                        .HasColumnOrder(1);
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
@@ -35,29 +59,27 @@ namespace KuCloud.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
-                        .HasColumnName("name");
+                        .HasColumnName("name")
+                        .HasColumnOrder(11);
 
                     b.Property<long?>("ParentId")
                         .HasColumnType("bigint")
-                        .HasColumnName("parent_id");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("path");
+                        .HasColumnName("parent_id")
+                        .HasColumnOrder(12);
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("type");
+                        .HasColumnName("type")
+                        .HasColumnOrder(10);
 
                     b.HasKey("Id")
-                        .HasName("pk_storage_node");
+                        .HasName("pk_storage_nodes");
 
                     b.HasIndex("ParentId")
-                        .HasDatabaseName("ix_storage_node_parent_id");
+                        .HasDatabaseName("ix_storage_nodes_parent_id");
 
-                    b.ToTable("storage_node", (string)null);
+                    b.ToTable("storage_nodes", (string)null);
 
                     b.HasDiscriminator<string>("Type");
 
@@ -72,11 +94,13 @@ namespace KuCloud.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("content_type");
+                        .HasColumnName("content_type")
+                        .HasColumnOrder(20);
 
                     b.Property<long>("Size")
                         .HasColumnType("bigint")
-                        .HasColumnName("size");
+                        .HasColumnName("size")
+                        .HasColumnOrder(21);
 
                     b.HasDiscriminator().HasValue("File");
                 });
@@ -88,12 +112,33 @@ namespace KuCloud.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("Folder");
                 });
 
+            modelBuilder.Entity("KuCloud.Core.Domains.StorageAggregate.FolderNesting", b =>
+                {
+                    b.HasOne("KuCloud.Core.Domains.StorageAggregate.Folder", "Ancestor")
+                        .WithMany("DescendantRelations")
+                        .HasForeignKey("AncestorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_folder_nesting_folders_ancestor_id");
+
+                    b.HasOne("KuCloud.Core.Domains.StorageAggregate.Folder", "Descendant")
+                        .WithMany("AncestorRelations")
+                        .HasForeignKey("DescendantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_folder_nesting_folders_descendant_id");
+
+                    b.Navigation("Ancestor");
+
+                    b.Navigation("Descendant");
+                });
+
             modelBuilder.Entity("KuCloud.Core.Domains.StorageAggregate.StorageNode", b =>
                 {
                     b.HasOne("KuCloud.Core.Domains.StorageAggregate.Folder", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
-                        .HasConstraintName("fk_storage_node_folders_parent_id");
+                        .HasConstraintName("fk_storage_nodes_folders_parent_id");
 
                     b.OwnsOne("KuCloud.Core.AuditInfo", "AuditInfo", b1 =>
                         {
@@ -113,6 +158,9 @@ namespace KuCloud.Infrastructure.Migrations
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)");
 
+                            b1.Property<DateTime?>("DeletionTime")
+                                .HasColumnType("timestamp with time zone");
+
                             b1.Property<bool>("IsDelete")
                                 .HasColumnType("boolean");
 
@@ -121,13 +169,13 @@ namespace KuCloud.Infrastructure.Migrations
 
                             b1.HasKey("StorageNodeId");
 
-                            b1.ToTable("storage_node");
+                            b1.ToTable("storage_nodes");
 
                             b1.ToJson("audit_info");
 
                             b1.WithOwner()
                                 .HasForeignKey("StorageNodeId")
-                                .HasConstraintName("fk_storage_node_storage_node_id");
+                                .HasConstraintName("fk_storage_nodes_storage_nodes_id");
                         });
 
                     b.Navigation("AuditInfo")
@@ -138,7 +186,11 @@ namespace KuCloud.Infrastructure.Migrations
 
             modelBuilder.Entity("KuCloud.Core.Domains.StorageAggregate.Folder", b =>
                 {
+                    b.Navigation("AncestorRelations");
+
                     b.Navigation("Children");
+
+                    b.Navigation("DescendantRelations");
                 });
 #pragma warning restore 612, 618
         }

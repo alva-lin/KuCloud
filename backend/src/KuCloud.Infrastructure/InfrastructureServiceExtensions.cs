@@ -6,7 +6,7 @@ using KuCloud.Core.Interfaces;
 using KuCloud.Infrastructure.Behaviors;
 using KuCloud.Infrastructure.Data;
 using KuCloud.Infrastructure.Email;
-using KuCloud.UseCases.Storages.Folders;
+using KuCloud.UseCases.Storages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

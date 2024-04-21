@@ -14,8 +14,14 @@ public static class AppDbContextExtensions
     public static void AddApplicationDbContext(this IServiceCollection services, string connectionString)
     {
         services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(connectionString)
-                .UseSnakeCaseNamingConvention()
+            {
+                options.UseNpgsql(connectionString)
+                    .UseSnakeCaseNamingConvention();
+
+#if DEBUG
+                options.EnableSensitiveDataLogging();
+#endif
+            }
         );
     }
 
@@ -55,12 +61,13 @@ public static class AppDbContextExtensions
             var tEntity = tConfig.BaseType!.GetGenericArguments().First();
             configuredTypes.Add(tEntity);
 
-            logger.LogInformation("Configuring {EntityType} with {EntityConfigurationType}", tEntity.Name, tConfig.Name);
+            logger.LogInformation("Configuring {EntityType} with {EntityConfigurationType}", tEntity.Name,
+                tConfig.Name);
         }
 
         var entityTypes = assemblies
             .SelectMany(assembly => assembly.GetTypes())
-            .Where(type => type is {IsClass: true, IsAbstract: false})
+            .Where(type => type is { IsClass: true, IsAbstract: false })
             .Where(type => type.IsAssignableTo(typeof(BasicEntity<>)))
             .Where(type => !configuredTypes.Contains(type))
             .Distinct()
@@ -75,7 +82,8 @@ public static class AppDbContextExtensions
 
             builder.ApplyConfiguration((dynamic) config);
 
-            logger.LogInformation("Configuring {EntityType} with {EntityConfigurationType}", tEntity.Name, tConfig.Name);
+            logger.LogInformation("Configuring {EntityType} with {EntityConfigurationType}", tEntity.Name,
+                tConfig.Name);
         }
 
         return builder;

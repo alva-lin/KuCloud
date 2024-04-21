@@ -1,73 +1,51 @@
-using KuCloud.Core.Domains.StorageAggregate;
-
 namespace KuCloud.UnitTests.Core.Domains.StorageAggregate;
 
 public sealed class StorageNode_Tests : BasicTest
 {
-    public static Folder CreateFolder(Folder? parent = null)
+    [Fact]
+    public void SetParent_Success()
     {
-        return new Faker<Folder>()
-            .CustomInstantiator(f => new Folder(f.Lorem.Word(), parent))
-            .Generate();
-    }
+        var parent = Folder_Tests.CreateFolder();
+        var child = FileNode_Tests.CreateFile();
 
-    public static FileNode CreateFile(Folder? parent = null)
-    {
-        return new Faker<FileNode>()
-            .CustomInstantiator(f => new FileNode(f.Lorem.Word(), parent, f.System.MimeType(), f.Random.Long()))
-            .Generate();
+        child.SetParent(parent);
+
+        child.Parent.Should().Be(parent);
+        child.ParentId.Should().Be(parent.Id);
+        parent.Children.Should().Contain(child);
     }
 
     [Fact]
-    public void Folder_Constructor_Success()
+    public void SetParent_SameParent_Success()
     {
-        var type = StorageType.Folder;
-        var name = Fake.Lorem.Word();
-        var parent = CreateFolder().OrNull(Fake);
+        var parent = Folder_Tests.CreateFolder();
+        var child = FileNode_Tests.CreateFile(parent);
 
-        var folder = new Folder(name, parent);
+        child.SetParent(parent);
 
-        folder.Type.Should().Be(type);
-        folder.Name.Should().Be(name);
-
-        folder.Parent.Should().Be(parent);
-        folder.ParentId.Should().Be(parent?.Id);
-        folder.Parent?.Children.Should().Contain(folder);
-
-        folder.Path.Should().Be(parent?.Path + "/" + name);
+        child.Parent.Should().Be(parent);
+        child.ParentId.Should().Be(parent.Id);
+        parent.Children.Should().Contain(child);
     }
 
     [Fact]
-    public void Folder_AddChild_Success()
+    public void SetParent_WhenParentIsSelf_ThrowException()
     {
-        var folder = CreateFolder();
-        var child = CreateFolder();
+        var folder = Folder_Tests.CreateFolder();
 
-        folder.AddChild(child);
+        var act = () => folder.SetParent(folder);
 
-        folder.Children.Should().Contain(child);
+        act.Should().Throw<InvalidOperationException>().WithMessage("Cannot set parent to self");
     }
 
     [Fact]
-    public void FileNode_Constructor_Success()
+    public void SetParent_WhenParentIsAncestor_ThrowException()
     {
-        var type = StorageType.File;
-        var name = Fake.Lorem.Word();
-        var parent = CreateFolder().OrNull(Fake);
-        var contentType = Fake.System.MimeType();
-        var size = Fake.Random.Long();
+        var parent = Folder_Tests.CreateFolder();
+        var child = Folder_Tests.CreateFolder(parent);
 
-        var file = new FileNode(name, parent, contentType, size);
+        var act = () => parent.SetParent(child);
 
-        file.Type.Should().Be(type);
-        file.Name.Should().Be(name);
-        file.ContentType.Should().Be(contentType);
-        file.Size.Should().Be(size);
-
-        file.Parent.Should().Be(parent);
-        file.ParentId.Should().Be(parent?.Id);
-        file.Parent?.Children.Should().Contain(file);
-
-        file.Path.Should().Be(parent?.Path + "/" + name);
+        act.Should().Throw<InvalidOperationException>().WithMessage("Cannot set parent to a descendant");
     }
 }

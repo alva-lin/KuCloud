@@ -1,12 +1,11 @@
 using Ardalis.SharedKernel;
 using KuCloud.Core.Domains.StorageAggregate;
-using KuCloud.Core.Domains.StorageAggregate.Specifitions;
-using KuCloud.UseCases.Storages.Folders;
+using KuCloud.UseCases.Storages;
 using Microsoft.Extensions.Logging;
 
-namespace KuCloud.UnitTests.UseCases.Storages.Folders;
+namespace KuCloud.UnitTests.UseCases.Storages;
 
-public class DeleteFolderHandler_Tests : BasicTest
+public sealed class DeleteFolderHandler_Tests : BasicTest
 {
     private readonly IRepository<Folder> _repository;
     private readonly DeleteFolderHandler _handler;
@@ -15,7 +14,7 @@ public class DeleteFolderHandler_Tests : BasicTest
     {
         _repository = Substitute.For<IRepository<Folder>>();
 
-        _handler = new DeleteFolderHandler(Substitute.For<ILogger<DeleteFolderHandler>>(), _repository);
+        _handler = new DeleteFolderHandler(Substitute.For<ILogger<DeleteFolderHandler>>(), _repository, new NoOpMediator());
     }
 
     public static DeleteFolderCommand CreateCommand(long folderId)
