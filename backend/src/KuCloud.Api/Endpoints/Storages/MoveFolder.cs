@@ -28,7 +28,7 @@ public class MoveFolder(IMediator mediator) : Endpoint<MoveFolderRequest>
 
     public override async Task HandleAsync(MoveFolderRequest req, CancellationToken ct)
     {
-        var result = await mediator.Send(new MoveFolderCommand(req.Id, req.ParentId), ct);
+        var result = await mediator.Send(new MoveFolderCommand(req.Id, req.ParentId, IncludeDeleted: false), ct);
 
         this.CheckResult(result);
 

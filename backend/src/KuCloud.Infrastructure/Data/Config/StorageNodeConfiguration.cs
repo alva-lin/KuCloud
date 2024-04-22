@@ -40,7 +40,8 @@ public sealed class FolderConfiguration : BasicEntityConfiguration<Folder, long>
     {
         builder.HasMany(e => e.Children)
             .WithOne(e => e.Parent)
-            .IsRequired(false);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
 

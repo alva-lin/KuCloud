@@ -2,8 +2,20 @@ using KuCloud.Core.Domains.StorageAggregate;
 
 namespace KuCloud.UseCases.Storages;
 
-public record MoveFolderCommand(long FolderId, long NewParentId) : ICommand<Result>;
+/// <summary>
+///     Move folder to new parent folder.
+/// </summary>
+/// <param name="FolderId"></param>
+/// <param name="NewParentId"></param>
+/// <param name="IncludeDeleted">if set true, even folder is deleted, it also move folder to new parent and restore it, or move failed.</param>
+public record MoveFolderCommand(long FolderId, long NewParentId, bool IncludeDeleted = false) : ICommand<Result>;
 
+/// <summary>
+///     将文件夹移动到新的父文件夹，如果文件夹已经在新的父文件夹下，则不做任何操作。
+/// </summary>
+/// <remarks>
+///     将被删除的文件夹视为普通文件夹，可以移动到新的父文件夹下，同时恢复文件夹。
+/// </remarks>
 public sealed class MoveFolderHandler(ILogger<MoveFolderHandler> logger, IRepository<Folder> repos)
     : ICommandHandler<MoveFolderCommand, Result>
 {
@@ -11,7 +23,8 @@ public sealed class MoveFolderHandler(ILogger<MoveFolderHandler> logger, IReposi
     {
         using var _ = logger.BeginScope($"Handle {nameof(MoveFolderCommand)} {request}");
 
-        var folder = await repos.SingleOrDefaultAsync(new SingleFolderById(request.FolderId), ct);
+        var specForFolder = new SingleFolderById(request.FolderId, includeDeleted: request.IncludeDeleted);
+        var folder = await repos.SingleOrDefaultAsync(specForFolder, ct);
         if (folder is null)
         {
             logger.LogWarning("Folder [{Id}] not found", request.FolderId);
@@ -70,6 +83,12 @@ public sealed class MoveFolderHandler(ILogger<MoveFolderHandler> logger, IReposi
         }
 
         folder.SetParent(newParent);
+
+        // restore folder if it is deleted
+        if (request.IncludeDeleted && folder.AuditInfo.IsDelete)
+        {
+            folder.AuditInfo.Restore();
+        }
 
         await repos.UpdateAsync(folder, ct);
 

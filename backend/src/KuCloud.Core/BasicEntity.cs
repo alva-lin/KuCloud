@@ -49,6 +49,12 @@ public class AuditInfo : ValueObject
         DeletionTime = deletionTime ?? DateTime.UtcNow;
         IsDelete = true;
     }
+
+    public void Restore()
+    {
+        DeletionTime = null;
+        IsDelete = false;
+    }
 }
 
 public interface IAuditable

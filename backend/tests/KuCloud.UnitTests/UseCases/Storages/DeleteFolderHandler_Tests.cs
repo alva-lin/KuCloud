@@ -30,11 +30,10 @@ public sealed class DeleteFolderHandler_Tests : BasicTest
     [Fact]
     public async Task Folder_Delete_Success()
     {
-        var folderId = 1;
-        var command = CreateCommand(folderId);
         var mockFolder = new Folder("Folder", null);
+        var command = CreateCommand(mockFolder.Id);
 
-        _repository.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
+        _repository.SingleOrDefaultAsync(Arg.Any<SingleFolderForAllInfo>(), Arg.Any<CancellationToken>())
             .Returns(mockFolder);
 
         var result = await _handler.Handle(command, default);
@@ -49,7 +48,7 @@ public sealed class DeleteFolderHandler_Tests : BasicTest
         var folderId = 1;
         var command = CreateCommand(folderId);
 
-        _repository.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
+        _repository.SingleOrDefaultAsync(Arg.Any<SingleFolderForAllInfo>(), Arg.Any<CancellationToken>())
             .Returns((Folder?) null);
 
         var result = await _handler.Handle(command, default);
