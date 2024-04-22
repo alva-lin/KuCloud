@@ -89,6 +89,8 @@ SeedDatabase(app);
 
 app.Run();
 
+Log.CloseAndFlush();
+
 static void SeedDatabase(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
