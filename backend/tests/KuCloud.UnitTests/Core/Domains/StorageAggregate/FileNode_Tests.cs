@@ -7,7 +7,7 @@ public sealed class FileNode_Tests : BasicTest
     public static FileNode CreateFile(Folder? parent = null)
     {
         return new Faker<FileNode>()
-            .CustomInstantiator(f => new FileNode(f.Lorem.Word(), parent, f.System.MimeType(), f.Random.Long()))
+            .CustomInstantiator(f => new FileNode(parent, f.Lorem.Word(), f.System.MimeType(), f.Random.Long()))
             .RuleFor(e => e.Id, f => f.IndexGlobal)
             .Generate();
     }
@@ -21,7 +21,7 @@ public sealed class FileNode_Tests : BasicTest
         var contentType = Fake.System.MimeType();
         var size = Fake.Random.Long();
 
-        var file = new FileNode(name, parent, contentType, size);
+        var file = new FileNode(parent, name, contentType, size);
 
         file.Type.Should().Be(type);
         file.Name.Should().Be(name);

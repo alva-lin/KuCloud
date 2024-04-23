@@ -2,9 +2,9 @@ using Ardalis.Specification;
 
 namespace KuCloud.Core.Domains.StorageAggregate;
 
-public class GetFolderListByIds : Specification<Folder>
+public sealed class MultipleFoldsById : Specification<Folder>
 {
-    public GetFolderListByIds(
+    public MultipleFoldsById(
         long[] ids,
         bool readOnly = false,
         bool includeChildren = true,

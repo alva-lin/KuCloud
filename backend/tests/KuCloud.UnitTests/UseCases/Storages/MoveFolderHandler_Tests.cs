@@ -127,28 +127,4 @@ public sealed class MoveFolderHandler_Tests : BasicTest
         result.IsSuccess.Should().BeFalse();
         result.Status.Should().Be(ResultStatus.Conflict);
     }
-
-    [Fact]
-    public async Task MoveFolder_FolderNameAlreadyExistsInNewParent()
-    {
-        var mockParent = Folder_Tests.CreateFolder(null);
-        var mockBrother = Folder_Tests.CreateFolder(mockParent);
-        var mockFolder = Folder_Tests.CreateFolder(null);
-        mockFolder.Name = mockBrother.Name;
-        var command = CreateCommand(mockFolder.Id, mockParent.Id);
-
-        _repository.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
-            .Returns(mockFolder, mockParent);
-
-        _repository.SingleOrDefaultAsync(Arg.Any<SingleFolderForAllInfo>(), Arg.Any<CancellationToken>())
-            .Returns(mockFolder);
-
-        var result = await _handler.Handle(command, default);
-
-        result.IsSuccess.Should().BeTrue();
-
-        // XXX - check folder name is updated to $"{mockFolder.Name} (1)"
-
-        await _repository.Received(1).UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
-    }
 }

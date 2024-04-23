@@ -79,8 +79,11 @@ public sealed partial class AppDbContext : DbContext
         switch (e.Entry.State)
         {
             case EntityState.Deleted:
-                entity.AuditInfo.SetDeleteInfo(now);
-                e.Entry.State = EntityState.Modified;
+                if (!entity.AuditInfo.IsDelete)
+                {
+                    entity.AuditInfo.SetDeleteInfo(now);
+                    e.Entry.State = EntityState.Modified;
+                }
                 break;
             case EntityState.Modified:
                 entity.AuditInfo.SetModifyInfo(now);

@@ -40,13 +40,13 @@ public static class SeedData
         var folder2 = new Folder("Folder2", folder);
         dbContext.Folders.Add(folder2);
 
-        var file1 = new FileNode("file1.txt", folder1, "text/plain", 0L);
+        var file1 = new FileNode(folder1, "file1.txt", "text/plain", 0L);
         dbContext.FileNodes.Add(file1);
 
-        var file2 = new FileNode("file2.txt", folder1, "text/plain", 0L);
+        var file2 = new FileNode(folder1, "file2.txt", "text/plain", 0L);
         dbContext.FileNodes.Add(file2);
 
-        var file3 = new FileNode("file3.txt", folder2, "text/plain", 0L);
+        var file3 = new FileNode(folder2, "file3.txt", "text/plain", 0L);
         dbContext.FileNodes.Add(file3);
 
         dbContext.SaveChanges();

@@ -9,14 +9,14 @@ public sealed class Folder : StorageNode
 
     public Folder(string name, Folder? parent) : base(StorageType.Folder, name, parent) { }
 
-    private readonly List<StorageNode> _children = [];
+    private readonly List<StorageNode> _children = [ ];
 
     /// <summary>
     ///     The children of the folder, include files and folders
     /// </summary>
     public IReadOnlyList<StorageNode> Children => _children.AsReadOnly();
 
-    private readonly List<FolderNesting> _descendantRelations = [];
+    private readonly List<FolderNesting> _descendantRelations = [ ];
 
     /// <summary>
     ///     The relations of the folder with all descendants
@@ -33,7 +33,7 @@ public sealed class Folder : StorageNode
         .ToList()
         .AsReadOnly();
 
-    private readonly List<FolderNesting> _ancestorRelations = [];
+    private readonly List<FolderNesting> _ancestorRelations = [ ];
 
     /// <summary>
     ///     The relations of the folder with all ancestors
@@ -90,12 +90,31 @@ public sealed class Folder : StorageNode
     /// <param name="node">The child node</param>
     public void AddChild(StorageNode node)
     {
+        CheckChildName(node, autoRename: true);
         _children.Add(node);
 
         if (node is Folder folder)
         {
             AddDescendant(folder);
         }
+    }
+
+    // TODO - 1. 添加单元测试, 2. 改名了，要怎么通知？
+    private void CheckChildName(StorageNode node, bool autoRename = false)
+    {
+        if (_children.All(e => e.Type == node.Type && e.Name != node.Name)) return;
+
+        if (!autoRename) throw new InvalidOperationException("The name already exists");
+
+        var index = 1;
+        var name = node.Name;
+        while (_children.Any(e => e.Type == node.Type && e.Name != name))
+        {
+            name = $"{name} ({index})";
+            index++;
+        }
+
+        Name = name;
     }
 
 

@@ -31,7 +31,7 @@ public class FolderDeletedHandler(ILogger<FolderDeletedHandler> logger, IReposit
         }
 
         // 在执行 Delete 时，一级子节点的 parentId 会被置为 null，需要恢复节点关系
-        var specForChildren = new GetFolderListByIds(notification.ChildrenIds,
+        var specForChildren = new MultipleFoldsById(notification.ChildrenIds,
             includeDeleted: true, includeDescendant: true);
         var children = await repos.ListAsync(specForChildren, ct);
         foreach (var child in children)

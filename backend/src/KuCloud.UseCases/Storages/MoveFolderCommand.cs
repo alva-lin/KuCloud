@@ -67,21 +67,6 @@ public sealed class MoveFolderHandler(ILogger<MoveFolderHandler> logger, IReposi
             return Result.Conflict("Cannot move folder to its descendant");
         }
 
-        if (newParent.Children.Any(e => e is Folder && e.Id != folder.Id && e.Name == folder.Name))
-        {
-            logger.LogWarning("Folder name already exists in new parent");
-            var index = 1;
-            while (newParent.Children.Any(e =>
-                       e is Folder && e.Id != folder.Id && e.Name == $"{folder.Name} ({index})"))
-            {
-                index++;
-            }
-
-            var newName = $"{folder.Name} ({index})";
-            folder.Name = newName;
-            logger.LogInformation("Rename folder [{Id}] to [{Name}]", folder.Id, newName);
-        }
-
         folder.SetParent(newParent);
 
         // restore folder if it is deleted
