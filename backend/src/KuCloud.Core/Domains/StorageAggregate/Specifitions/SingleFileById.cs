@@ -15,7 +15,7 @@ public sealed class SingleFileById : Specification<FileNode>, ISingleResultSpeci
 
         if (includeParent)
         {
-            Query.Include(e => e.Parent);
+            Query.Include(e => e.Parent).ThenInclude(e => e!.Children);
         }
 
         if (includeDeleted)

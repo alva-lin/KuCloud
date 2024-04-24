@@ -6,7 +6,6 @@ public record FileNodeDto : StorageNodeDto
 
     public FileNodeDto(FileNode file) : base(file)
     {
-        Attributes.Add("ContentType", file.ContentType);
         Attributes.Add("Size", file.Size);
     }
 }

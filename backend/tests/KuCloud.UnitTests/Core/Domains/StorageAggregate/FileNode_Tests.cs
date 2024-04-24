@@ -18,14 +18,14 @@ public sealed class FileNode_Tests : BasicTest
         var type = StorageType.File;
         var name = Fake.Lorem.Word();
         var parent = Folder_Tests.CreateFolder().OrNull(Fake);
-        var contentType = Fake.System.MimeType();
+        var path = Fake.System.FilePath();
         var size = Fake.Random.Long();
 
-        var file = new FileNode(parent, name, contentType, size);
+        var file = new FileNode(parent, name, path, size);
 
         file.Type.Should().Be(type);
         file.Name.Should().Be(name);
-        file.ContentType.Should().Be(contentType);
+        file.Path.Should().Be(path);
         file.Size.Should().Be(size);
 
         file.Parent.Should().Be(parent);

@@ -9,15 +9,20 @@ public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
     protected StorageNode(StorageType type, string name, Folder? parent)
     {
         Type = type;
-
-        Name = Guard.Against.CheckInvalidPath(name);
+        Name = name;
 
         SetParent(parent);
     }
 
     public StorageType Type { get; set; } = null!;
 
-    public string Name { get; set; } = null!;
+    private string _name = null!;
+
+    public string Name
+    {
+        get => _name;
+        set => _name = Guard.Against.CheckInvalidPath(value);
+    }
 
     public Folder? Parent { get; set; }
 

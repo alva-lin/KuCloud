@@ -16,7 +16,7 @@ public sealed class AddFileHandler(
     {
         using var _ = logger.BeginScope($"Handle {nameof(AddFileCommand)} {request}");
 
-        if (!await fileService.FileExistsAsync(request.Path, cancellationToken))
+        if (!await fileService.ExistsAsync(request.Path, cancellationToken))
         {
             logger.LogWarning("File [{Path}] not found", request.Path);
             return Result.NotFound("File not found");
@@ -30,8 +30,9 @@ public sealed class AddFileHandler(
             return Result.NotFound("Folder not found");
         }
 
-        var fileSize = await fileService.GetFileSizeAsync(request.Path, cancellationToken);
-        var file = new FileNode(folder, request.FileName, string.Empty, fileSize);
+        var fileSize = await fileService.GetSizeAsync(request.Path, cancellationToken);
+
+        var file = new FileNode(folder, request.FileName, request.Path, fileSize);
 
         file = await fileRepository.AddAsync(file, cancellationToken);
 

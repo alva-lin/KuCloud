@@ -49,7 +49,7 @@ public sealed class FileConfiguration : BasicEntityConfiguration<FileNode, long>
 {
     public override void Configure(EntityTypeBuilder<FileNode> builder)
     {
-        builder.Property(e => e.ContentType)
+        builder.Property(e => e.Path)
             .HasColumnOrder(20)
             .IsRequired()
             .HasMaxLength(DataSchemaConstants.DefaultNameLength);

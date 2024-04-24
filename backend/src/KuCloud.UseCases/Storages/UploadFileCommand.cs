@@ -14,7 +14,7 @@ public sealed class UploadFileHandler(
     {
         using var _ = logger.BeginScope($"Handle {nameof(UploadFileCommand)} {request}");
 
-        var path = await fileService.UploadFileAsync(request.Stream, cancellationToken);
+        var path = await fileService.UploadAsync(request.Stream, cancellationToken);
 
         logger.LogInformation("Upload file {Path}", path);
 

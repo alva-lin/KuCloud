@@ -8,9 +8,10 @@ namespace KuCloud.UseCases.Storages;
 /// <remarks>
 ///     原则上，只批量移动同一个文件夹下的文件，不支持跨文件将多选文件移动到新的文件夹下。
 /// </remarks>
-/// <param name="FileIds"></param>
-/// <param name="FolderId"></param>
-public record MoveFileCommand(long[] FileIds, long FolderId) : ICommand<Result>;
+/// <param name="Ids"></param>
+/// <param name="ParentId"></param>
+/// <param name="IncludeDeleted">if set true, even file is deleted, it also moves file to new parent and restore it, or move failed.</param>
+public record MoveFileCommand(long[] Ids, long ParentId, bool IncludeDeleted = false) : ICommand<Result>;
 
 public sealed class MoveFileHandler(
     ILogger<MoveFileHandler> logger,
@@ -22,9 +23,9 @@ public sealed class MoveFileHandler(
     {
         using var _ = logger.BeginScope($"Handle {nameof(MoveFileCommand)} {request}");
 
-        var specForFiles = new MultipleFilesById(request.FileIds);
+        var specForFiles = new MultipleFilesById(request.Ids);
         var files = await fileRepository.ListAsync(specForFiles, ct);
-        if (files.Count != request.FileIds.Length)
+        if (files.Count != request.Ids.Length)
         {
             logger.LogWarning("Some file not found");
             return Result.NotFound("Some file not found");
@@ -37,17 +38,17 @@ public sealed class MoveFileHandler(
         }
 
         var oldFolder = files.First().Parent;
-        if (oldFolder?.Id == request.FolderId)
+        if (oldFolder?.Id == request.ParentId)
         {
             logger.LogWarning("Cannot move files to the same folder");
             return Result.Conflict("Cannot move files to the same folder");
         }
 
-        var specForFolder = new SingleFolderById(request.FolderId);
+        var specForFolder = new SingleFolderById(request.ParentId);
         var folder = await folderRepository.SingleOrDefaultAsync(specForFolder, ct);
         if (folder is null)
         {
-            logger.LogWarning("Folder [{Id}] not found", request.FolderId);
+            logger.LogWarning("Folder [{Id}] not found", request.ParentId);
             return Result.NotFound("Folder not found");
         }
 

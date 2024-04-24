@@ -8,7 +8,7 @@ public interface IFileService
     /// <param name="stream"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<string> UploadFileAsync(Stream stream, CancellationToken cancellationToken);
+    Task<string> UploadAsync(Stream stream, CancellationToken cancellationToken);
 
     /// <summary>
     ///     Download file from storage
@@ -16,7 +16,7 @@ public interface IFileService
     /// <param name="path"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Stream> DownloadFileAsync(string path, CancellationToken cancellationToken);
+    Task<Stream> DownloadAsync(string path, CancellationToken cancellationToken);
 
     /// <summary>
     ///     Check if file exists
@@ -24,7 +24,7 @@ public interface IFileService
     /// <param name="path"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<bool> FileExistsAsync(string path, CancellationToken cancellationToken);
+    Task<bool> ExistsAsync(string path, CancellationToken cancellationToken);
 
     /// <summary>
     ///     Get file size (bytes)
@@ -32,7 +32,7 @@ public interface IFileService
     /// <param name="path"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<long> GetFileSizeAsync(string path, CancellationToken cancellationToken);
+    Task<long> GetSizeAsync(string path, CancellationToken cancellationToken);
 
     /// <summary>
     ///     Delete file
@@ -40,5 +40,5 @@ public interface IFileService
     /// <param name="path"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<bool> DeleteFileAsync(string path, CancellationToken cancellationToken);
+    Task<bool> DeleteAsync(string path, CancellationToken cancellationToken);
 }

@@ -28,7 +28,7 @@ public class LocalStorageService : IFileService
         return (folder, fileName, Path.Combine(folder, fileName));
     }
 
-    public async Task<string> UploadFileAsync(Stream stream, CancellationToken cancellationToken)
+    public async Task<string> UploadAsync(Stream stream, CancellationToken cancellationToken)
     {
         var (folder, fileName, path) = GeneratePath();
         EnsureDirectory(folder);
@@ -39,7 +39,7 @@ public class LocalStorageService : IFileService
         return path;
     }
 
-    public Task<Stream> DownloadFileAsync(string path, CancellationToken cancellationToken)
+    public Task<Stream> DownloadAsync(string path, CancellationToken cancellationToken)
     {
         var fullPath = GetFullPath(path);
 
@@ -48,14 +48,14 @@ public class LocalStorageService : IFileService
         return Task.FromResult(stream);
     }
 
-    public async Task<bool> FileExistsAsync(string path, CancellationToken cancellationToken)
+    public async Task<bool> ExistsAsync(string path, CancellationToken cancellationToken)
     {
         var fullPath = GetFullPath(path);
 
         return await Task.FromResult(File.Exists(fullPath));
     }
 
-    public async Task<long> GetFileSizeAsync(string path, CancellationToken cancellationToken)
+    public async Task<long> GetSizeAsync(string path, CancellationToken cancellationToken)
     {
         var fullPath = GetFullPath(path);
 
@@ -64,7 +64,7 @@ public class LocalStorageService : IFileService
         return await Task.FromResult(fileInfo.Length);
     }
 
-    public async Task<bool> DeleteFileAsync(string path, CancellationToken cancellationToken)
+    public async Task<bool> DeleteAsync(string path, CancellationToken cancellationToken)
     {
         var fullPath = GetFullPath(path);
 

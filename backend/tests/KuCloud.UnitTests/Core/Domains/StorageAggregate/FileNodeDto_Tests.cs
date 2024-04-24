@@ -19,9 +19,6 @@ public sealed class FileNodeDto_Tests : BasicTest
         dto.Type.Should().Be(file.Type);
         dto.Name.Should().Be(file.Name);
 
-        dto.Attributes.Should().ContainKey("ContentType");
-        dto.Attributes["ContentType"].Should().Be(file.ContentType);
-
         dto.Attributes.Should().ContainKey("Size");
         dto.Attributes["Size"].Should().Be(file.Size);
     }

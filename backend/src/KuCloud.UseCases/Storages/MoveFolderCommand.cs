@@ -5,10 +5,10 @@ namespace KuCloud.UseCases.Storages;
 /// <summary>
 ///     Move folder to new parent folder.
 /// </summary>
-/// <param name="FolderId"></param>
+/// <param name="Id"></param>
 /// <param name="NewParentId"></param>
-/// <param name="IncludeDeleted">if set true, even folder is deleted, it also move folder to new parent and restore it, or move failed.</param>
-public record MoveFolderCommand(long FolderId, long NewParentId, bool IncludeDeleted = false) : ICommand<Result>;
+/// <param name="IncludeDeleted">if set true, even folder is deleted, it also moves folder to new parent and restore it, or move failed.</param>
+public record MoveFolderCommand(long Id, long NewParentId, bool IncludeDeleted = false) : ICommand<Result>;
 
 /// <summary>
 ///     将文件夹移动到新的父文件夹，如果文件夹已经在新的父文件夹下，则不做任何操作。
@@ -23,11 +23,11 @@ public sealed class MoveFolderHandler(ILogger<MoveFolderHandler> logger, IReposi
     {
         using var _ = logger.BeginScope($"Handle {nameof(MoveFolderCommand)} {request}");
 
-        var specForFolder = new SingleFolderById(request.FolderId, includeDeleted: request.IncludeDeleted);
+        var specForFolder = new SingleFolderById(request.Id, includeDeleted: request.IncludeDeleted);
         var folder = await repos.SingleOrDefaultAsync(specForFolder, ct);
         if (folder is null)
         {
-            logger.LogWarning("Folder [{Id}] not found", request.FolderId);
+            logger.LogWarning("Folder [{Id}] not found", request.Id);
             return Result.NotFound("Folder not found");
         }
 
@@ -53,11 +53,11 @@ public sealed class MoveFolderHandler(ILogger<MoveFolderHandler> logger, IReposi
 
         // inorder to check if new parent is descendant of folder, and to set new parent
         // need to load all children of folder
-        folder = await repos.SingleOrDefaultAsync(new SingleFolderForAllInfo(request.FolderId),
+        folder = await repos.SingleOrDefaultAsync(new SingleFolderForAllInfo(request.Id),
             ct);
         if (folder is null)
         {
-            logger.LogWarning("Folder [{Id}] not found", request.FolderId);
+            logger.LogWarning("Folder [{Id}] not found", request.Id);
             return Result.NotFound("Folder not found");
         }
 

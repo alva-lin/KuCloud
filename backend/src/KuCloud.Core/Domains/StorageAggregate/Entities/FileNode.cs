@@ -5,13 +5,13 @@ public sealed class FileNode : StorageNode
     // EF Core required
     private FileNode() { }
 
-    public FileNode(Folder? parent, string name, string contentType, long size) : base(StorageType.File, name, parent)
+    public FileNode(Folder? parent, string name, string path, long size) : base(StorageType.File, name, parent)
     {
-        ContentType = Guard.Against.NullOrWhiteSpace(contentType);
+        Path = path;
         Size = size;
     }
 
-    public string ContentType { get; set; } = null!;
+    public string Path { get; set; } = null!;
 
     public long Size { get; set; }
 }
