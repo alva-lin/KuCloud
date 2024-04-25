@@ -6,19 +6,19 @@ namespace KuCloud.UnitTests.UseCases.Storages;
 
 public sealed class MoveFileHandler_Tests : BasicTest
 {
-    private readonly IRepository<Folder> _folderRepository;
-    private readonly IRepository<FileNode> _fileRepository;
+    private readonly IRepository<Folder> _folderRepos;
+    private readonly IReadRepository<FileNode> _fileRepos;
     private readonly MoveFileHandler _handler;
 
     public MoveFileHandler_Tests()
     {
-        _folderRepository = Substitute.For<IRepository<Folder>>();
-        _fileRepository = Substitute.For<IRepository<FileNode>>();
+        _folderRepos = Substitute.For<IRepository<Folder>>();
+        _fileRepos = Substitute.For<IReadRepository<FileNode>>();
 
         _handler = new(
             Substitute.For<ILogger<MoveFileHandler>>(),
-            _folderRepository,
-            _fileRepository
+            _folderRepos,
+            _fileRepos
         );
     }
 
@@ -45,10 +45,10 @@ public sealed class MoveFileHandler_Tests : BasicTest
         };
         var command = CreateCommand(mockFiles.Select(e => e.Id).ToArray(), mockNewFolder.Id);
 
-        _fileRepository.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
+        _fileRepos.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
             .Returns(mockFiles);
 
-        _folderRepository.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
+        _folderRepos.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
             .Returns(mockFolder);
 
 
@@ -57,7 +57,7 @@ public sealed class MoveFileHandler_Tests : BasicTest
 
         result.IsSuccess.Should().BeTrue();
 
-        await _folderRepository.Received(1).UpdateAsync(mockFolder, Arg.Any<CancellationToken>());
+        await _folderRepos.Received(1).UpdateAsync(mockFolder, Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public sealed class MoveFileHandler_Tests : BasicTest
         };
         var command = CreateCommand(mockFiles.Select(e => e.Id).ToArray(), mockNewFolder.Id);
 
-        _fileRepository.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
+        _fileRepos.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
             .Returns([ ]);
 
         var result = await _handler.Handle(command, default);
@@ -80,7 +80,7 @@ public sealed class MoveFileHandler_Tests : BasicTest
         result.IsSuccess.Should().BeFalse();
         result.Status.Should().Be(ResultStatus.NotFound);
 
-        await _folderRepository.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
+        await _folderRepos.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public sealed class MoveFileHandler_Tests : BasicTest
         };
         var command = CreateCommand(mockFiles.Select(e => e.Id).ToArray(), mockNewFolder.Id);
 
-        _fileRepository.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
+        _fileRepos.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
             .Returns(mockFiles);
 
         var result = await _handler.Handle(command, default);
@@ -104,7 +104,7 @@ public sealed class MoveFileHandler_Tests : BasicTest
         result.IsSuccess.Should().BeFalse();
         result.Status.Should().Be(ResultStatus.Conflict);
 
-        await _folderRepository.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
+        await _folderRepos.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public sealed class MoveFileHandler_Tests : BasicTest
         };
         var command = CreateCommand(mockFiles.Select(e => e.Id).ToArray(), mockFolder.Id);
 
-        _fileRepository.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
+        _fileRepos.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
             .Returns(mockFiles);
 
         var result = await _handler.Handle(command, default);
@@ -126,7 +126,7 @@ public sealed class MoveFileHandler_Tests : BasicTest
         result.IsSuccess.Should().BeFalse();
         result.Status.Should().Be(ResultStatus.Conflict);
 
-        await _folderRepository.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
+        await _folderRepos.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -140,10 +140,10 @@ public sealed class MoveFileHandler_Tests : BasicTest
         };
         var command = CreateCommand(mockFiles.Select(e => e.Id).ToArray(), -1L);
 
-        _fileRepository.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
+        _fileRepos.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
             .Returns(mockFiles);
 
-        _folderRepository.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
+        _folderRepos.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>())
             .Returns((Folder?) null);
 
         var result = await _handler.Handle(command, default);
@@ -151,6 +151,6 @@ public sealed class MoveFileHandler_Tests : BasicTest
         result.IsSuccess.Should().BeFalse();
         result.Status.Should().Be(ResultStatus.NotFound);
 
-        await _folderRepository.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
+        await _folderRepos.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
     }
 }

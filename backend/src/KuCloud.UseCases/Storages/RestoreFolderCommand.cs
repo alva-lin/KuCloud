@@ -1,6 +1,6 @@
 namespace KuCloud.UseCases.Storages;
 
-public record RestoreFolderCommand(long Id, long ParentId) : ICommand<Result>;
+public sealed record RestoreFolderCommand(long Id, long ParentId) : ICommand<Result>;
 
 public sealed class RestoreFolderHandler(
     ILogger<RestoreFolderHandler> logger,

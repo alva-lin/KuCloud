@@ -4,12 +4,12 @@ using KuCloud.Core.Interfaces;
 namespace KuCloud.UseCases.Storages;
 
 // TODO - 添加文件应该使用别的方式，而不是使用 path 来定位
-public record AddFileCommand(long FolderId, string Path, string FileName) : ICommand<Result<long>>;
+public sealed record AddFileCommand(long FolderId, string Path, string FileName) : ICommand<Result<long>>;
 
 public sealed class AddFileHandler(
     ILogger<AddFileHandler> logger,
-    IRepository<Folder> folderRepository,
-    IRepository<FileNode> fileRepository,
+    IReadRepository<Folder> folderRepos,
+    IRepository<FileNode> fileRepos,
     IFileService fileService
 ) : ICommandHandler<AddFileCommand, Result<long>>
 {
@@ -24,7 +24,7 @@ public sealed class AddFileHandler(
         }
 
         var folder =
-            await folderRepository.SingleOrDefaultAsync(new SingleFolderById(request.FolderId), cancellationToken);
+            await folderRepos.SingleOrDefaultAsync(new SingleFolderById(request.FolderId), cancellationToken);
         if (folder is null)
         {
             logger.LogWarning("Folder [{Id}] not found", request.FolderId);
@@ -35,7 +35,7 @@ public sealed class AddFileHandler(
 
         var file = new FileNode(folder, request.FileName, request.Path, fileSize);
 
-        file = await fileRepository.AddAsync(file, cancellationToken);
+        file = await fileRepos.AddAsync(file, cancellationToken);
 
         logger.LogInformation("Add file [{Id}] {Name}", file.Id, file.Name);
 

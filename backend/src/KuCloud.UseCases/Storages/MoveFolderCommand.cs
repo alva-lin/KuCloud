@@ -8,7 +8,7 @@ namespace KuCloud.UseCases.Storages;
 /// <param name="Id"></param>
 /// <param name="NewParentId"></param>
 /// <param name="IncludeDeleted">if set true, even folder is deleted, it also moves folder to new parent and restore it, or move failed.</param>
-public record MoveFolderCommand(long Id, long NewParentId, bool IncludeDeleted = false) : ICommand<Result>;
+public sealed record MoveFolderCommand(long Id, long NewParentId, bool IncludeDeleted = false) : ICommand<Result>;
 
 /// <summary>
 ///     将文件夹移动到新的父文件夹，如果文件夹已经在新的父文件夹下，则不做任何操作。

@@ -4,7 +4,7 @@ namespace KuCloud.UseCases.Storages;
 
 // TODO - 修改实现，返回体需要是统一的 dto，和 get nodes 一样
 
-public record GetDeletedNodesQuery(int Page, int PageSize, string? Keyword) : IQuery<Result<List<long>>>;
+public sealed record GetDeletedNodesQuery(int Page, int PageSize, string? Keyword) : IQuery<Result<List<long>>>;
 
 public sealed class GetDeletedNodesHandler(
     IReadRepository<StorageNode> repos

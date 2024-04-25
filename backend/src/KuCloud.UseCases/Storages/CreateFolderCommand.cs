@@ -2,7 +2,7 @@ using KuCloud.Core.Domains.StorageAggregate;
 
 namespace KuCloud.UseCases.Storages;
 
-public record CreateFolderCommand(string Name, long? ParentId) : ICommand<Result<Folder>>;
+public sealed record CreateFolderCommand(string Name, long? ParentId) : ICommand<Result<Folder>>;
 
 public sealed class CreateFolderHandler(ILogger<CreateFolderHandler> logger, IRepository<Folder> repos)
     : ICommandHandler<CreateFolderCommand, Result<Folder>>

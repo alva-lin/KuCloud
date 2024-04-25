@@ -2,7 +2,7 @@ using KuCloud.Core.Interfaces;
 
 namespace KuCloud.UseCases.Storages;
 
-public record UploadFileCommand(Stream Stream)
+public sealed record UploadFileCommand(Stream Stream)
     : ICommand<Result<string>>;
 
 public sealed class UploadFileHandler(

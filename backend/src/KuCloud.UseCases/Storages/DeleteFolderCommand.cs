@@ -2,10 +2,13 @@ using KuCloud.Core.Domains.StorageAggregate;
 
 namespace KuCloud.UseCases.Storages;
 
-public record DeleteFolderCommand(long Id) : ICommand<Result>;
+public sealed record DeleteFolderCommand(long Id) : ICommand<Result>;
 
-public class DeleteFolderHandler(ILogger<DeleteFolderHandler> logger, IRepository<Folder> repos, IMediator mediator)
-    : ICommandHandler<DeleteFolderCommand, Result>
+public sealed class DeleteFolderHandler(
+    ILogger<DeleteFolderHandler> logger,
+    IRepository<Folder> repos,
+    IMediator mediator
+) : ICommandHandler<DeleteFolderCommand, Result>
 {
     public async Task<Result> Handle(DeleteFolderCommand request, CancellationToken ct)
     {

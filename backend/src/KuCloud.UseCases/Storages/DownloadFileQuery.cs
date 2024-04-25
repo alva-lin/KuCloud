@@ -3,9 +3,9 @@ using KuCloud.Core.Interfaces;
 
 namespace KuCloud.UseCases.Storages;
 
-public record DownloadFileQuery(long FileId) : IQuery<Result<DownloadFileResult>>;
+public sealed record DownloadFileQuery(long FileId) : IQuery<Result<DownloadFileResult>>;
 
-public record DownloadFileResult(Stream Content, string Name, string ContentType, long Size, DateTime? LastModified);
+public sealed record DownloadFileResult(Stream Content, string Name, string ContentType, long Size, DateTime? LastModified);
 
 public sealed class DownloadFileHandler(
     ILogger<DownloadFileHandler> logger,

@@ -2,7 +2,7 @@ using KuCloud.Core.Domains.StorageAggregate;
 
 namespace KuCloud.UseCases.Storages;
 
-public record RenameFileCommand(long FileId, string NewName) : ICommand<Result>;
+public sealed record RenameFileCommand(long FileId, string NewName) : ICommand<Result>;
 
 public sealed class RenameFileHandler(
     ILogger<RenameFileHandler> logger,

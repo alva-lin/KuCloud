@@ -7,14 +7,14 @@ namespace KuCloud.UnitTests.UseCases.Storages;
 
 public sealed class AddFileHandler_Tests : BasicTest
 {
-    private readonly IRepository<Folder> _folderRepos;
+    private readonly IReadRepository<Folder> _folderRepos;
     private readonly IRepository<FileNode> _fileRepos;
     private readonly IFileService _fileService;
     private readonly AddFileHandler _handler;
 
     public AddFileHandler_Tests()
     {
-        _folderRepos = Substitute.For<IRepository<Folder>>();
+        _folderRepos = Substitute.For<IReadRepository<Folder>>();
         _fileRepos = Substitute.For<IRepository<FileNode>>();
         _fileService = new FakeFileService();
 

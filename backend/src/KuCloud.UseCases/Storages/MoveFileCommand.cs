@@ -11,12 +11,12 @@ namespace KuCloud.UseCases.Storages;
 /// <param name="Ids"></param>
 /// <param name="ParentId"></param>
 /// <param name="IncludeDeleted">if set true, even file is deleted, it also moves file to new parent and restore it, or move failed.</param>
-public record MoveFileCommand(long[] Ids, long ParentId, bool IncludeDeleted = false) : ICommand<Result>;
+public sealed record MoveFileCommand(long[] Ids, long ParentId, bool IncludeDeleted = false) : ICommand<Result>;
 
 public sealed class MoveFileHandler(
     ILogger<MoveFileHandler> logger,
-    IRepository<Folder> folderRepository,
-    IRepository<FileNode> fileRepository
+    IRepository<Folder> folderRepos,
+    IReadRepository<FileNode> fileRepos
 ) : ICommandHandler<MoveFileCommand, Result>
 {
     public async Task<Result> Handle(MoveFileCommand request, CancellationToken ct)
@@ -24,7 +24,7 @@ public sealed class MoveFileHandler(
         using var _ = logger.BeginScope($"Handle {nameof(MoveFileCommand)} {request}");
 
         var specForFiles = new MultipleFilesById(request.Ids, includeDeleted: request.IncludeDeleted);
-        var files = await fileRepository.ListAsync(specForFiles, ct);
+        var files = await fileRepos.ListAsync(specForFiles, ct);
         if (files.Count != request.Ids.Length)
         {
             logger.LogWarning("Some file not found");
@@ -45,7 +45,7 @@ public sealed class MoveFileHandler(
         }
 
         var specForFolder = new SingleFolderById(request.ParentId);
-        var folder = await folderRepository.SingleOrDefaultAsync(specForFolder, ct);
+        var folder = await folderRepos.SingleOrDefaultAsync(specForFolder, ct);
         if (folder is null)
         {
             logger.LogWarning("Folder [{Id}] not found", request.ParentId);
@@ -67,7 +67,7 @@ public sealed class MoveFileHandler(
             }
         }
 
-        await folderRepository.UpdateAsync(folder, ct);
+        await folderRepos.UpdateAsync(folder, ct);
 
         return Result.Success();
     }

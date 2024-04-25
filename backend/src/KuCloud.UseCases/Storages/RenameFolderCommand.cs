@@ -2,7 +2,7 @@ using KuCloud.Core.Domains.StorageAggregate;
 
 namespace KuCloud.UseCases.Storages;
 
-public record RenameFolderCommand(long Id, string Name) : ICommand<Result>;
+public sealed record RenameFolderCommand(long Id, string Name) : ICommand<Result>;
 
 public sealed class RenameFolderHandler(ILogger<RenameFolderHandler> logger, IRepository<Folder> repos)
     : ICommandHandler<RenameFolderCommand, Result>
@@ -24,15 +24,11 @@ public sealed class RenameFolderHandler(ILogger<RenameFolderHandler> logger, IRe
             return Result.Success();
         }
 
-        if (folder.Parent is not null)
+        if (folder.Parent is not null &&
+            folder.Parent.Children.Any(e => e is Folder && e.Id != request.Id && e.Name == request.Name))
         {
-            var parent = await repos.SingleOrDefaultAsync(new SingleFolderById(folder.Parent.Id), ct)!;
-
-            if (parent!.Children.Any(e => e is Folder && e.Id != request.Id && e.Name == request.Name))
-            {
-                logger.LogWarning("Folder name already exists");
-                return Result.Conflict("Folder name already exists");
-            }
+            logger.LogWarning("Folder name already exists");
+            return Result.Conflict("Folder name already exists");
         }
 
         var originalName = folder.Name;

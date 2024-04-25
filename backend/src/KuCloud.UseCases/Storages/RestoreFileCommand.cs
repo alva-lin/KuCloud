@@ -1,11 +1,11 @@
 namespace KuCloud.UseCases.Storages;
 
-public record RestoreFileCommand(long[] Ids, long FolderId) : ICommand<Result>;
+public sealed record RestoreFileCommand(long[] Ids, long FolderId) : ICommand<Result>;
 
 public sealed class RestoreFileHandler(
     ILogger<RestoreFileHandler> logger,
-    IMediator mediator)
-    : ICommandHandler<RestoreFileCommand, Result>
+    IMediator mediator
+) : ICommandHandler<RestoreFileCommand, Result>
 {
     public async Task<Result> Handle(RestoreFileCommand request, CancellationToken ct)
     {
