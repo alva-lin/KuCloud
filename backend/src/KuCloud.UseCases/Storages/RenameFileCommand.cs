@@ -13,7 +13,7 @@ public sealed class RenameFileHandler(
     {
         using var _ = logger.BeginScope($"Handle {nameof(RenameFileCommand)} {request}");
 
-        var specs = new SingleFileById(request.FileId, includeParent: true);
+        var specs = new SingleFileById(request.FileId);
         var file = await repos.SingleOrDefaultAsync(specs, ct);
 
         if (file is null)

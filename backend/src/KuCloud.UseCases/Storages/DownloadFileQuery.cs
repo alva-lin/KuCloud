@@ -3,15 +3,17 @@ using KuCloud.Core.Interfaces;
 
 namespace KuCloud.UseCases.Storages;
 
-public record DownloadFileQuery(long FileId) : IQuery<Result<Stream>>;
+public record DownloadFileQuery(long FileId) : IQuery<Result<DownloadFileResult>>;
+
+public record DownloadFileResult(Stream Content, string Name, string ContentType, long Size, DateTime? LastModified);
 
 public sealed class DownloadFileHandler(
     ILogger<DownloadFileHandler> logger,
     IReadRepository<FileNode> repos,
     IFileService fileService
-) : IQueryHandler<DownloadFileQuery, Result<Stream>>
+) : IQueryHandler<DownloadFileQuery, Result<DownloadFileResult>>
 {
-    public async Task<Result<Stream>> Handle(DownloadFileQuery request, CancellationToken cancellationToken)
+    public async Task<Result<DownloadFileResult>> Handle(DownloadFileQuery request, CancellationToken cancellationToken)
     {
         using var _ = logger.BeginScope($"Handle {nameof(DownloadFileQuery)} {request}");
 
@@ -26,6 +28,7 @@ public sealed class DownloadFileHandler(
 
         logger.LogInformation("Download file[{Id}] {Path}", file.Id, file.Path);
 
-        return stream;
+        var lastModified = file.AuditInfo.ModifiedTime ?? file.AuditInfo.CreationTime;
+        return new DownloadFileResult( stream, file.Name, file.ContentType, file.Size, lastModified);
     }
 }

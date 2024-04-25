@@ -31,7 +31,7 @@ public class LocalStorageService : IFileService
     public async Task<string> UploadAsync(Stream stream, CancellationToken cancellationToken)
     {
         var (folder, fileName, path) = GeneratePath();
-        EnsureDirectory(folder);
+        EnsureDirectory(GetFullPath(folder));
 
         await using var fileStream = File.Create(GetFullPath(path));
         await stream.CopyToAsync(fileStream, cancellationToken);

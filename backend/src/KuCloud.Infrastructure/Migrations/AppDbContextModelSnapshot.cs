@@ -141,7 +141,7 @@ namespace KuCloud.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .HasConstraintName("fk_storage_nodes_folders_parent_id");
 
-                    b.OwnsOne("KuCloud.Core.AuditInfo", "AuditInfo", b1 =>
+                    b.OwnsOne("KuCloud.Core.Domains.StorageAggregate.StorageNode.AuditInfo#KuCloud.Core.AuditInfo", "AuditInfo", b1 =>
                         {
                             b1.Property<long>("StorageNodeId")
                                 .HasColumnType("bigint");
@@ -170,7 +170,7 @@ namespace KuCloud.Infrastructure.Migrations
 
                             b1.HasKey("StorageNodeId");
 
-                            b1.ToTable("storage_nodes");
+                            b1.ToTable("storage_nodes", (string)null);
 
                             b1.ToJson("audit_info");
 

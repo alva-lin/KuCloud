@@ -3,6 +3,7 @@ using KuCloud.Core.Interfaces;
 
 namespace KuCloud.UseCases.Storages;
 
+// TODO - 添加文件应该使用别的方式，而不是使用 path 来定位
 public record AddFileCommand(long FolderId, string Path, string FileName) : ICommand<Result<long>>;
 
 public sealed class AddFileHandler(

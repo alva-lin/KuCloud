@@ -23,7 +23,7 @@ public sealed class MoveFileHandler(
     {
         using var _ = logger.BeginScope($"Handle {nameof(MoveFileCommand)} {request}");
 
-        var specForFiles = new MultipleFilesById(request.Ids);
+        var specForFiles = new MultipleFilesById(request.Ids, includeDeleted: request.IncludeDeleted);
         var files = await fileRepository.ListAsync(specForFiles, ct);
         if (files.Count != request.Ids.Length)
         {
@@ -55,6 +55,16 @@ public sealed class MoveFileHandler(
         foreach (var file in files)
         {
             file.SetParent(folder);
+        }
+
+        // TODO - 是否需要拆开？另外 RestoreFile / MoveFile 也有类似的逻辑
+        // Restore files if IncludeDeleted is true
+        if (request.IncludeDeleted)
+        {
+            foreach (var file in files)
+            {
+                file.AuditInfo.Restore();
+            }
         }
 
         await folderRepository.UpdateAsync(folder, ct);

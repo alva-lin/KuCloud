@@ -2,7 +2,7 @@ using KuCloud.Core.Domains.StorageAggregate;
 
 namespace KuCloud.UseCases.Storages;
 
-public record DeleteFileCommand(long FileId) : ICommand<Result>;
+public record DeleteFileCommand(long Id) : ICommand<Result>;
 
 public sealed class DeleteFileHandler(
     ILogger<DeleteFileHandler> logger,
@@ -13,12 +13,15 @@ public sealed class DeleteFileHandler(
     {
         using var _ = logger.BeginScope($"Handle {nameof(DeleteFileCommand)} {request}");
 
-        var file = await fileRepository.SingleOrDefaultAsync(new SingleFileById(request.FileId), cancellationToken);
+        var spec = new SingleFileById(request.Id, includeParent: true);
+        var file = await fileRepository.SingleOrDefaultAsync(spec, cancellationToken);
         if (file is null)
         {
-            logger.LogWarning("File [{Id}] not found", request.FileId);
+            logger.LogWarning("File [{Id}] not found", request.Id);
             return Result.NotFound("File not found");
         }
+
+        file.SetParent(null);
 
         await fileRepository.DeleteAsync(file, cancellationToken);
 

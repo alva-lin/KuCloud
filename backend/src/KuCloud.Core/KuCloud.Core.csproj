@@ -10,6 +10,7 @@
     <PackageReference Include="Ardalis.Specification"/>
     <PackageReference Include="MediatR"/>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+    <PackageReference Include="MimeMapping" />
   </ItemGroup>
 
   <ItemGroup>
