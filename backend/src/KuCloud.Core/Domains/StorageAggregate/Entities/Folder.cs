@@ -102,19 +102,18 @@ public sealed class Folder : StorageNode
     // TODO - 1. 添加单元测试, 2. 改名了，要怎么通知？
     private void CheckChildName(StorageNode node, bool autoRename = false)
     {
-        if (_children.All(e => e.Type == node.Type && e.Name != node.Name)) return;
+        var hasSameName = (StorageNode e) => e.Type == node.Type && e.Id != node.Id && e.Name == node.Name;
+
+        if (_children.All(e => !hasSameName(e))) return;
 
         if (!autoRename) throw new InvalidOperationException("The name already exists");
 
         var index = 1;
-        var name = node.Name;
-        while (_children.Any(e => e.Type == node.Type && e.Name != name))
+        var originName = node.Name;
+        while (_children.Any(hasSameName))
         {
-            name = $"{name} ({index})";
-            index++;
+            node.Name = $"{originName} ({index++})";
         }
-
-        Name = name;
     }
 
 

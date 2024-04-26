@@ -95,6 +95,19 @@ public sealed class Folder_Tests : BasicTest
         folder.Children.Should().NotContain(child);
     }
 
+    [Fact]
+    public void Folder_AddChild_HasSameName()
+    {
+        var folder = CreateFolder();
+        var brother = CreateFolder(folder);
+        var child = CreateFolder();
+        child.Name = brother.Name;
+
+        child.SetParent(folder);
+
+        child.Name.Should().NotBe(brother.Name);
+    }
+
     record TestFolderTree(
         Folder Root,
         Folder Node_1,
