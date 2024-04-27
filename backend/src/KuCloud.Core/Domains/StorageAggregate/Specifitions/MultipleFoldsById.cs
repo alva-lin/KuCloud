@@ -30,6 +30,10 @@ public sealed class MultipleFoldsById : Specification<Folder>
         {
             Query.IgnoreQueryFilters();
         }
+        else
+        {
+            Query.Where(e => e.AncestorRelations.All(r => !r.Ancestor.AuditInfo.IsDelete));
+        }
 
         if (readOnly)
         {

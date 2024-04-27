@@ -10,9 +10,8 @@ public sealed class SingleFolderById : Specification<Folder>, ISingleResultSpeci
         bool includeChildren = true,
         bool includeDescendant = false,
         bool includeDeleted = false
-        )
+    )
     {
-        // TODO - 查询时如何判断是否已经删除（父节点已经删除，但是子节点还在）
 
         Query.Where(x => x.Id == id);
 
@@ -31,6 +30,10 @@ public sealed class SingleFolderById : Specification<Folder>, ISingleResultSpeci
         if (includeDeleted)
         {
             Query.IgnoreQueryFilters();
+        }
+        else
+        {
+            Query.Where(e => e.AncestorRelations.All(r => !r.Ancestor.AuditInfo.IsDelete));
         }
 
         if (readOnly)

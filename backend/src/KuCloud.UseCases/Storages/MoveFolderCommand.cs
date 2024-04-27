@@ -23,8 +23,10 @@ public sealed class MoveFolderHandler(ILogger<MoveFolderHandler> logger, IReposi
     {
         using var _ = logger.BeginScope($"Handle {nameof(MoveFolderCommand)} {request}");
 
-        var specForFolder = new SingleFolderById(request.Id, includeDeleted: request.IncludeDeleted);
-        var folder = await repos.SingleOrDefaultAsync(specForFolder, ct);
+        var folder = await repos.SingleOrDefaultAsync(
+            new SingleFolderById(request.Id, includeDeleted: request.IncludeDeleted),
+            cancellationToken: ct
+        );
         if (folder is null)
         {
             logger.LogWarning("Folder [{Id}] not found", request.Id);
@@ -53,8 +55,10 @@ public sealed class MoveFolderHandler(ILogger<MoveFolderHandler> logger, IReposi
 
         // inorder to check if new parent is descendant of folder, and to set new parent
         // need to load all children of folder
-        folder = await repos.SingleOrDefaultAsync(new SingleFolderForAllInfo(request.Id),
-            ct);
+        folder = await repos.SingleOrDefaultAsync(
+            new SingleFolderForAllInfo(request.Id, includeDeleted: request.IncludeDeleted),
+            cancellationToken: ct
+        );
         if (folder is null)
         {
             logger.LogWarning("Folder [{Id}] not found", request.Id);
