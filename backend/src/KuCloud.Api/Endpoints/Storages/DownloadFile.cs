@@ -4,7 +4,7 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed record DownloadFileRequest
 {
-    public const string Route = "/File/Download/{Id}";
+    public const string Route = "/Storage/Download/{Id}";
 
     public long Id { get; set; }
 

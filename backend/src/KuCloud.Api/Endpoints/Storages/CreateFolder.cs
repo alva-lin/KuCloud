@@ -4,7 +4,7 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed record CreateFolderRequest
 {
-    public const string Route = "/Folder";
+    public const string Route = "/Storage/Create-Folder";
 
     public string Name { get; set; } = null!;
 

@@ -4,7 +4,7 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed record AddFileRequest
 {
-    public const string Route = "/File";
+    public const string Route = "Storage/Add-File";
 
     public long FolderId { get; set; }
 

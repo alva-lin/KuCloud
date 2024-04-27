@@ -2,20 +2,20 @@ using KuCloud.UseCases.Storages;
 
 namespace KuCloud.Api.Endpoints.Storages;
 
-public sealed record RestoreFileRequest
+public sealed record RestoreNodeRequest
 {
-    public const string Route = "/File/Restore";
+    public const string Route = "/Storage/Restore";
 
     public long[] Ids { get; set; } = null!;
 
     public long FolderId { get; set; }
 }
 
-public sealed class RestoreFile(IMediator mediator) : Endpoint<RestoreFileRequest>
+public sealed class RestoreNode(IMediator mediator) : Endpoint<RestoreNodeRequest>
 {
     public override void Configure()
     {
-        Post(RestoreFileRequest.Route);
+        Post(RestoreNodeRequest.Route);
         AllowAnonymous();
         Summary(s =>
         {
@@ -23,9 +23,9 @@ public sealed class RestoreFile(IMediator mediator) : Endpoint<RestoreFileReques
         });
     }
 
-    public override async Task HandleAsync(RestoreFileRequest req, CancellationToken ct)
+    public override async Task HandleAsync(RestoreNodeRequest req, CancellationToken ct)
     {
-        var result = await mediator.Send(new RestoreFileCommand(req.Ids, req.FolderId), ct);
+        var result = await mediator.Send(new RestoreNodeCommand(req.Ids, req.FolderId), ct);
 
         this.CheckResult(result);
 

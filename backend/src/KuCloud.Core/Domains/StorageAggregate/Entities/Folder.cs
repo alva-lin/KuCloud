@@ -99,7 +99,7 @@ public sealed class Folder : StorageNode
         }
     }
 
-    private void CheckChildName(StorageNode node, bool autoRename = false)
+    public void CheckChildName(StorageNode node, bool autoRename = false)
     {
         var hasSameName = (StorageNode e) => e.Type == node.Type && e.Id != node.Id && e.Name == node.Name;
 

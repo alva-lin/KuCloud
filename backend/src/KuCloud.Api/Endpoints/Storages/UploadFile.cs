@@ -4,7 +4,7 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed class UploadFileRequest
 {
-    public const string Route = "/File/Upload";
+    public const string Route = "/Storage/Upload";
 
     public IFormFile File { get; set; } = null!;
 }
