@@ -99,7 +99,6 @@ public sealed class Folder : StorageNode
         }
     }
 
-    // TODO - 1. 添加单元测试, 2. 改名了，要怎么通知？
     private void CheckChildName(StorageNode node, bool autoRename = false)
     {
         var hasSameName = (StorageNode e) => e.Type == node.Type && e.Id != node.Id && e.Name == node.Name;

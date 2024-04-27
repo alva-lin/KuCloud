@@ -73,12 +73,6 @@ public sealed class MoveFolderHandler(ILogger<MoveFolderHandler> logger, IReposi
 
         folder.SetParent(newParent);
 
-        // restore folder if it is deleted
-        if (request.IncludeDeleted && folder.AuditInfo.IsDelete)
-        {
-            folder.AuditInfo.Restore();
-        }
-
         await repos.UpdateAsync(folder, ct);
 
         logger.LogInformation("Move folder [{Id}] to parent [{ParentId}]", folder.Id, newParent.Id);

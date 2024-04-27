@@ -2,7 +2,6 @@ using MimeMapping;
 
 namespace KuCloud.Core.Domains.StorageAggregate;
 
-// TODO - 是否需要将 Folder 和 FileNode 分开，不该继承同一个基类
 public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
 {
     // EF Core required

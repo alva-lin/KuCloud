@@ -84,52 +84,6 @@ public sealed class MoveFileHandler_Tests : BasicTest
     }
 
     [Fact]
-    public async Task File_Move_Conflict()
-    {
-        var mockNewFolder = Folder_Tests.CreateFolder();
-        var mockFolder = Folder_Tests.CreateFolder();
-        var mockFolder2 = Folder_Tests.CreateFolder();
-        var mockFiles = new List<FileNode>
-        {
-            FileNode_Tests.CreateFile(mockFolder),
-            FileNode_Tests.CreateFile(mockFolder2),
-        };
-        var command = CreateCommand(mockFiles.Select(e => e.Id).ToArray(), mockNewFolder.Id);
-
-        _fileRepos.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
-            .Returns(mockFiles);
-
-        var result = await _handler.Handle(command, default);
-
-        result.IsSuccess.Should().BeFalse();
-        result.Status.Should().Be(ResultStatus.Conflict);
-
-        await _folderRepos.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
-    }
-
-    [Fact]
-    public async Task File_Move_SameFolder()
-    {
-        var mockFolder = Folder_Tests.CreateFolder();
-        var mockFiles = new List<FileNode>
-        {
-            FileNode_Tests.CreateFile(mockFolder),
-            FileNode_Tests.CreateFile(mockFolder),
-        };
-        var command = CreateCommand(mockFiles.Select(e => e.Id).ToArray(), mockFolder.Id);
-
-        _fileRepos.ListAsync(Arg.Any<MultipleFilesById>(), Arg.Any<CancellationToken>())
-            .Returns(mockFiles);
-
-        var result = await _handler.Handle(command, default);
-
-        result.IsSuccess.Should().BeFalse();
-        result.Status.Should().Be(ResultStatus.Conflict);
-
-        await _folderRepos.DidNotReceive().UpdateAsync(Arg.Any<Folder>(), Arg.Any<CancellationToken>());
-    }
-
-    [Fact]
     public async Task File_Move_FolderNotFound()
     {
         var mockFolder = Folder_Tests.CreateFolder();

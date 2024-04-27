@@ -4,13 +4,15 @@
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses"/>
     <PackageReference Include="Ardalis.Result"/>
-    <PackageReference Include="Ardalis.SharedKernel"/>
     <PackageReference Include="Ardalis.SmartEnum"/>
     <PackageReference Include="Ardalis.SmartEnum.SystemTextJson" />
     <PackageReference Include="Ardalis.Specification"/>
     <PackageReference Include="MediatR"/>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
     <PackageReference Include="MimeMapping" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KuCloud.SharedKernel\KuCloud.SharedKernel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

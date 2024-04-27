@@ -31,19 +31,6 @@ public sealed class MoveFileHandler(
             return Result.NotFound("Some file not found");
         }
 
-        if (files.Select(e => e.Parent).Distinct().Count() > 1)
-        {
-            logger.LogWarning("Cannot move files from different folders");
-            return Result.Conflict("Cannot move files from different folders");
-        }
-
-        var oldFolder = files.First().Parent;
-        if (oldFolder?.Id == request.ParentId)
-        {
-            logger.LogWarning("Cannot move files to the same folder");
-            return Result.Conflict("Cannot move files to the same folder");
-        }
-
         var specForFolder = new SingleFolderById(request.ParentId);
         var folder = await folderRepos.SingleOrDefaultAsync(specForFolder, ct);
         if (folder is null)
@@ -55,16 +42,6 @@ public sealed class MoveFileHandler(
         foreach (var file in files)
         {
             file.SetParent(folder);
-        }
-
-        // TODO - 是否需要拆开？另外 RestoreFile / MoveFile 也有类似的逻辑
-        // Restore files if IncludeDeleted is true
-        if (request.IncludeDeleted)
-        {
-            foreach (var file in files)
-            {
-                file.AuditInfo.Restore();
-            }
         }
 
         await folderRepos.UpdateAsync(folder, ct);

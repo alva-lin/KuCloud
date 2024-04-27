@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuCloud.TestShared", "tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuCloud.ConsoleApp1", "src\KuCloud.ConsoleApp1\KuCloud.ConsoleApp1.csproj", "{E7828F62-1C0D-4EB4-ACB2-5A7B88AA7921}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuCloud.SharedKernel", "src\KuCloud.SharedKernel\KuCloud.SharedKernel.csproj", "{C17FD53F-9012-41DF-B7DF-879B9D881E94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +167,18 @@ Global
 		{E7828F62-1C0D-4EB4-ACB2-5A7B88AA7921}.Release|x64.Build.0 = Release|Any CPU
 		{E7828F62-1C0D-4EB4-ACB2-5A7B88AA7921}.Release|x86.ActiveCfg = Release|Any CPU
 		{E7828F62-1C0D-4EB4-ACB2-5A7B88AA7921}.Release|x86.Build.0 = Release|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Debug|x64.Build.0 = Debug|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Debug|x86.Build.0 = Debug|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Release|x64.ActiveCfg = Release|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Release|x64.Build.0 = Release|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Release|x86.ActiveCfg = Release|Any CPU
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -180,6 +194,7 @@ Global
 		{C9751CB7-4CD6-4633-A99A-4F6ADD525437} = {4CF7DAC2-E252-4ABD-A1FF-B795066C600D}
 		{E5F55A0F-D1B4-4C88-B2C7-FDDE7D721230} = {B31B4797-1D9F-4288-808C-BE9A31A98C7D}
 		{E7828F62-1C0D-4EB4-ACB2-5A7B88AA7921} = {4CF7DAC2-E252-4ABD-A1FF-B795066C600D}
+		{C17FD53F-9012-41DF-B7DF-879B9D881E94} = {106AE906-5075-410A-B941-912F811848EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F19343-8185-4A9F-9165-0EA8544BC925}

@@ -7,6 +7,7 @@ using KuCloud.Infrastructure.Behaviors;
 using KuCloud.Infrastructure.Data;
 using KuCloud.Infrastructure.Email;
 using KuCloud.Infrastructure.Services;
+using KuCloud.SharedKernel;
 using KuCloud.UseCases.Storages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -67,6 +68,8 @@ public static class InfrastructureServiceExtensions
         var connectionString = configuration.GetConnectionString("KuCloud");
         Guard.Against.Null(connectionString);
         services.AddApplicationDbContext(connectionString);
+
+        services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
         services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));

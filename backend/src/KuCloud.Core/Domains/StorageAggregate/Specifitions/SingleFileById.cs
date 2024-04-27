@@ -22,6 +22,10 @@ public sealed class SingleFileById : Specification<FileNode>, ISingleResultSpeci
         {
             Query.IgnoreQueryFilters();
         }
+        else
+        {
+            Query.Where(e => e.Parent != null || !e.Parent!.AuditInfo.IsDelete);
+        }
 
         if (readOnly)
         {
