@@ -4,7 +4,7 @@ namespace KuCloud.UseCases.Storages;
 
 public sealed record GetFolderQuery(long Id) : IQuery<Result<Folder>>;
 
-public sealed class GetFolderHandler(IRepository<Folder> repos) : IQueryHandler<GetFolderQuery, Result<Folder>>
+public sealed class GetFolderHandler(IReadRepository<Folder> repos) : IQueryHandler<GetFolderQuery, Result<Folder>>
 {
     public async Task<Result<Folder>> Handle(GetFolderQuery request, CancellationToken cancellationToken)
     {

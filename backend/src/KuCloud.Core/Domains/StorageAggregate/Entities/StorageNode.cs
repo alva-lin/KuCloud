@@ -28,7 +28,7 @@ public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
 
     public string ContentType => MimeUtility.GetMimeMapping(Name);
 
-    public Folder? Parent { get; set; }
+    public Folder? Parent { get; private set; }
 
     public long? ParentId { get; set; }
 

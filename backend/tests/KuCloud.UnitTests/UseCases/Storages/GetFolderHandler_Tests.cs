@@ -6,12 +6,12 @@ namespace KuCloud.UnitTests.UseCases.Storages;
 
 public sealed class GetFolderHandler_Tests : BasicTest
 {
-    private readonly IRepository<Folder> _repository;
+    private readonly IReadRepository<Folder> _repository;
     private readonly GetFolderHandler _handler;
 
     public GetFolderHandler_Tests()
     {
-        _repository = Substitute.For<IRepository<Folder>>();
+        _repository = Substitute.For<IReadRepository<Folder>>();
         _handler = new GetFolderHandler(_repository);
     }
 

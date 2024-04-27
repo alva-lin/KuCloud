@@ -82,8 +82,7 @@ public sealed class RenameFolderHandler_Tests : BasicTest
     {
         var mockParent = Folder_Tests.CreateFolder(null);
         var mockSon = Folder_Tests.CreateFolder(mockParent);
-        var mockFolder = Folder_Tests.CreateFolder();
-        mockFolder.Parent = mockParent;
+        var mockFolder = Folder_Tests.CreateFolder(mockParent);
 
         var command = CreateCommand(0L) with { Name = mockSon.Name };
 
