@@ -40,7 +40,6 @@ public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
         {
             if (parent == folder)
             {
-                // TODO - 捕捉异常，然后返回为正常的信息
                 throw new InvalidOperationException("Cannot set parent to self");
             }
 
