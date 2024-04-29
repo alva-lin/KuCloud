@@ -1,3 +1,5 @@
+using MimeMapping;
+
 namespace KuCloud.Core.Domains.StorageAggregate;
 
 public sealed class FileNode : StorageNode
@@ -10,6 +12,8 @@ public sealed class FileNode : StorageNode
         Path = path;
         Size = size;
     }
+
+    public string ContentType => MimeUtility.GetMimeMapping(Name);
 
     public string Path { get; set; } = null!;
 

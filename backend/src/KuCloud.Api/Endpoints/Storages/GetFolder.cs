@@ -1,4 +1,3 @@
-using KuCloud.Core.Domains.StorageAggregate;
 using KuCloud.UseCases.Storages;
 
 namespace KuCloud.Api.Endpoints.Storages;
@@ -12,7 +11,7 @@ public sealed record GetFolderRequest
     public static string BuildRoute(long id) => Route.Replace("{Id}", id.ToString());
 }
 
-public class GetFolder(IMediator mediator) : Endpoint<GetFolderRequest, StorageNodeDto>
+public class GetFolder(IMediator mediator) : Endpoint<GetFolderRequest, FolderDto>
 {
     public override void Configure()
     {
@@ -26,6 +25,6 @@ public class GetFolder(IMediator mediator) : Endpoint<GetFolderRequest, StorageN
         var result = await mediator.Send(new GetFolderQuery(req.Id), ct);
 
         this.CheckResult(result);
-        await SendAsync(StorageNodeDto.Create(result.Value), cancellation: ct);
+        await SendAsync(result.Value, cancellation: ct);
     }
 }

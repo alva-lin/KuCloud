@@ -1,3 +1,4 @@
+using KuCloud.SharedKernel;
 using KuCloud.UseCases.Storages;
 
 namespace KuCloud.Api.Endpoints.Storages;
@@ -25,7 +26,8 @@ public sealed class GetDeletedNodesValidator : Validator<GetDeletedNodesRequest>
     }
 }
 
-public sealed class GetDeletedNodes(IMediator mediator) : Endpoint<GetDeletedNodesRequest, List<long>>
+public sealed class GetDeletedNodes(IMediator mediator)
+    : Endpoint<GetDeletedNodesRequest, Result<PaginatedList<StorageNodeDto>>>
 {
     public override void Configure()
     {

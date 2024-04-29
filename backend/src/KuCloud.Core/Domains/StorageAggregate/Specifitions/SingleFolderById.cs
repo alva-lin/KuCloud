@@ -24,7 +24,7 @@ public sealed class SingleFolderById : Specification<Folder>, ISingleResultSpeci
 
         if (includeChildren)
         {
-            Query.Include(e => e.Children);
+            Query.Include(e => e.Children.OrderBy(e => e.Type).ThenBy(e => e.Name));
         }
 
         if (includeDeleted)

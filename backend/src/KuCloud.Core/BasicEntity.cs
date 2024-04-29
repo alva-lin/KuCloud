@@ -55,7 +55,11 @@ public class AuditInfo : ValueObject
         DeletionTime = null;
         IsDelete = false;
     }
+
+    public AuditRecord ToRecord() => new(CreationTime, ModifiedTime, DeletionTime, IsDelete);
 }
+
+public record AuditRecord(DateTime CreationTime, DateTime? ModifiedTime, DateTime? DeletionTime, bool IsDelete);
 
 public interface IAuditable
 {
@@ -66,4 +70,9 @@ public abstract class BasicEntity<TId> : EntityBase<TId>, IAuditable
     where TId : struct, IEquatable<TId>
 {
     public AuditInfo AuditInfo { get; set; } = new();
+}
+
+public abstract record BasicDto
+{
+    public AuditRecord AuditRecord { get; set; } = null!;
 }

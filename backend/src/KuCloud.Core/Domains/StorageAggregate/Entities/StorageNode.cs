@@ -1,5 +1,3 @@
-using MimeMapping;
-
 namespace KuCloud.Core.Domains.StorageAggregate;
 
 public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
@@ -24,8 +22,6 @@ public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
         get => _name;
         set => _name = Guard.Against.CheckInvalidPath(value);
     }
-
-    public string ContentType => MimeUtility.GetMimeMapping(Name);
 
     public Folder? Parent { get; private set; }
 
