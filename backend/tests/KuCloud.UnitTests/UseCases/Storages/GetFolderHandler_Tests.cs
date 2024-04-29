@@ -41,8 +41,10 @@ public sealed class GetFolderHandler_Tests : BasicTest
     public async Task Handle_WhenFolderFound_ReturnsFolder()
     {
         // Arrange
-        var query = CreateQuery(1);
         var mockFolder = Folder_Tests.CreateFolder();
+        var mockDto = FolderDto.Map(mockFolder);
+        var query = CreateQuery(mockFolder.Id);
+
         _repository.SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>()).Returns(mockFolder);
 
         // Act
@@ -50,7 +52,7 @@ public sealed class GetFolderHandler_Tests : BasicTest
 
         // Assert
         result.Status.Should().Be(ResultStatus.Ok);
-        result.Value.Should().Be(mockFolder);
+        result.Value.Should().Be(mockDto);
 
         await _repository.Received(1).SingleOrDefaultAsync(Arg.Any<SingleFolderById>(), Arg.Any<CancellationToken>());
     }
