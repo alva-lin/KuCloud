@@ -25,6 +25,8 @@ builder.Host.UseSerilog((_, config) =>
 var microsoftLogger = new SerilogLoggerFactory(logger)
     .CreateLogger<Program>();
 
+builder.Services.AddSingleton<AppStatusMonitor>();
+
 // Configure Web Behavior
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
@@ -87,6 +89,8 @@ SeedDatabase(app);
 
 app.Run();
 
+Log.CloseAndFlush();
+
 static void SeedDatabase(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
@@ -111,7 +115,7 @@ void AddShowAllServicesSupport()
     // add list services for diagnostic purposes - see https://github.com/ardalis/AspNetCoreStartupServices
     builder.Services.Configure<ServiceConfig>(config =>
     {
-        config.Services = new List<ServiceDescriptor>(builder.Services);
+        config.Services = [ ..builder.Services ];
 
         // optional - default path to view services is /listallservices - recommended to choose your own path
         config.Path = "/listservices";

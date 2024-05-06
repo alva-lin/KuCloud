@@ -1,9 +1,9 @@
-﻿using Ardalis.SharedKernel;
-
-namespace KuCloud.Core;
+﻿namespace KuCloud.Core;
 
 public class AuditInfo : ValueObject
 {
+    public bool IsDelete { get; private set; }
+
     public string Creator { get; private set; } = null!;
 
     public string CreatorId { get; private set; } = null!;
@@ -12,7 +12,7 @@ public class AuditInfo : ValueObject
 
     public DateTime? ModifiedTime { get; private set; }
 
-    public bool IsDelete { get; private set; }
+    public DateTime? DeletionTime { get; private set; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -32,6 +32,8 @@ public class AuditInfo : ValueObject
 
     public void SetCreateInfo(DateTime? creationTime = null)
     {
+        Creator = "System";
+        CreatorId = "System";
         CreationTime = creationTime ?? DateTime.UtcNow;
         ModifiedTime = null;
         IsDelete = false;
@@ -42,12 +44,22 @@ public class AuditInfo : ValueObject
         ModifiedTime = modifiedTime ?? DateTime.UtcNow;
     }
 
-    public void SetDeleteInfo(DateTime? modifiedTime = null)
+    public void SetDeleteInfo(DateTime? deletionTime = null)
     {
-        ModifiedTime = modifiedTime ?? DateTime.UtcNow;
+        DeletionTime = deletionTime ?? DateTime.UtcNow;
         IsDelete = true;
     }
+
+    public void Restore()
+    {
+        DeletionTime = null;
+        IsDelete = false;
+    }
+
+    public AuditRecord ToRecord() => new(CreationTime, ModifiedTime, DeletionTime, IsDelete);
 }
+
+public record AuditRecord(DateTime CreationTime, DateTime? ModifiedTime, DateTime? DeletionTime, bool IsDelete);
 
 public interface IAuditable
 {
@@ -58,4 +70,9 @@ public abstract class BasicEntity<TId> : EntityBase<TId>, IAuditable
     where TId : struct, IEquatable<TId>
 {
     public AuditInfo AuditInfo { get; set; } = new();
+}
+
+public abstract record BasicDto
+{
+    public AuditRecord AuditRecord { get; set; } = null!;
 }

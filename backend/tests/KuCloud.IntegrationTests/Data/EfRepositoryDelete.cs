@@ -1,5 +1,4 @@
-﻿using KuCloud.Core.ContributorAggregate;
-using Xunit;
+﻿using KuCloud.Core.Domains.StorageAggregate;
 
 namespace KuCloud.IntegrationTests.Data;
 
@@ -11,7 +10,7 @@ public class EfRepositoryDelete : BaseEfRepoTestFixture
         // add a Contributor
         var repository = GetRepository();
         var initialName = Guid.NewGuid().ToString();
-        var contributor = new Contributor(initialName);
+        var contributor = new Folder(initialName, null);
         await repository.AddAsync(contributor);
 
         // delete the item
@@ -19,6 +18,6 @@ public class EfRepositoryDelete : BaseEfRepoTestFixture
 
         // verify it's no longer there
         Assert.DoesNotContain(await repository.ListAsync(),
-            contributor => contributor.Name == initialName);
+            e => e.Name == initialName);
     }
 }

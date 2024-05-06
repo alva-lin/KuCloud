@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Ardalis.SharedKernel;
 using KuCloud.Core;
-using KuCloud.Core.ContributorAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
@@ -9,7 +8,7 @@ using SmartEnum.EFCore;
 
 namespace KuCloud.Infrastructure.Data;
 
-public sealed class AppDbContext : DbContext
+public sealed partial class AppDbContext : DbContext
 {
     private readonly ILogger<AppDbContext> _logger;
     private readonly IDomainEventDispatcher? _dispatcher;
@@ -26,8 +25,6 @@ public sealed class AppDbContext : DbContext
         ChangeTracker.StateChanged += UpdateAuditInfo;
         ChangeTracker.Tracked += UpdateAuditInfo;
     }
-
-    public DbSet<Contributor> Contributors => Set<Contributor>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,8 +79,11 @@ public sealed class AppDbContext : DbContext
         switch (e.Entry.State)
         {
             case EntityState.Deleted:
-                entity.AuditInfo.SetDeleteInfo(now);
-                e.Entry.State = EntityState.Modified;
+                if (!entity.AuditInfo.IsDelete)
+                {
+                    entity.AuditInfo.SetDeleteInfo(now);
+                    e.Entry.State = EntityState.Modified;
+                }
                 break;
             case EntityState.Modified:
                 entity.AuditInfo.SetModifyInfo(now);

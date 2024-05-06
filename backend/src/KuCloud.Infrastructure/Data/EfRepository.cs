@@ -3,10 +3,6 @@ using Ardalis.Specification.EntityFrameworkCore;
 
 namespace KuCloud.Infrastructure.Data;
 
-// inherit from Ardalis.Specification type
-public class EfRepository<T> : RepositoryBase<T>, IReadRepository<T>, IRepository<T> where T : class, IAggregateRoot
-{
-    public EfRepository(AppDbContext dbContext) : base(dbContext)
-    {
-    }
-}
+public class EfRepository<T>(AppDbContext dbContext)
+    : RepositoryBase<T>(dbContext), IReadRepository<T>, IRepository<T>
+    where T : class, IAggregateRoot;

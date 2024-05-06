@@ -23,3 +23,11 @@
 **/values.dev.yaml
 LICENSE
 README.md
+
+#Local Log Files
+**/log[s]
+
+# appsettings.json
+**/appsettings.*.json
+
+**/*.sql

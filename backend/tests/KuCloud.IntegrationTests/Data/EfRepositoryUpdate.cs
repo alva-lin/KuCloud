@@ -1,47 +1,45 @@
-﻿using KuCloud.Core.ContributorAggregate;
+﻿using KuCloud.Core.Domains.StorageAggregate;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace KuCloud.IntegrationTests.Data;
 
 public class EfRepositoryUpdate : BaseEfRepoTestFixture
 {
     [Fact]
-    public async Task UpdatesItemAfterAddingIt()
+    public async Task UpdateFolderAfterAddingIt()
     {
-        // add a Contributor
+        // add a Folder
         var repository = GetRepository();
         var initialName = Guid.NewGuid().ToString();
-        var contributor = new Contributor(initialName);
+        var folder = new Folder(initialName, null);
 
-        await repository.AddAsync(contributor);
+        await repository.AddAsync(folder);
 
         // detach the item so we get a different instance
-        DbContext.Entry(contributor).State = EntityState.Detached;
+        DbContext.Entry(folder).State = EntityState.Detached;
 
         // fetch the item and update its title
-        var newContributor = (await repository.ListAsync())
-            .FirstOrDefault(contributor => contributor.Name == initialName);
-        if (newContributor == null)
+        var newFolder = (await repository.ListAsync())
+            .FirstOrDefault(e => e.Name == initialName);
+        if (newFolder == null)
         {
-            Assert.NotNull(newContributor);
+            Assert.NotNull(newFolder);
             return;
         }
 
-        Assert.NotSame(contributor, newContributor);
+        Assert.NotSame(folder, newFolder);
         var newName = Guid.NewGuid().ToString();
-        newContributor.UpdateName(newName);
+        newFolder.Name = newName;
 
         // Update the item
-        await repository.UpdateAsync(newContributor);
+        await repository.UpdateAsync(newFolder);
 
         // Fetch the updated item
         var updatedItem = (await repository.ListAsync())
-            .FirstOrDefault(contributor => contributor.Name == newName);
+            .FirstOrDefault(folder => folder.Name == newName);
 
         Assert.NotNull(updatedItem);
-        Assert.NotEqual(contributor.Name, updatedItem?.Name);
-        Assert.Equal(contributor.Status, updatedItem?.Status);
-        Assert.Equal(newContributor.Id, updatedItem?.Id);
+        Assert.NotEqual(folder.Name, updatedItem.Name);
+        Assert.Equal(newFolder.Id, updatedItem.Id);
     }
 }

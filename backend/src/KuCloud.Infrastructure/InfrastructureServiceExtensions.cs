@@ -1,12 +1,14 @@
 ﻿using System.Reflection;
 using Ardalis.GuardClauses;
 using Ardalis.SharedKernel;
-using KuCloud.Core.ContributorAggregate;
+using KuCloud.Core.Domains.StorageAggregate;
 using KuCloud.Core.Interfaces;
 using KuCloud.Infrastructure.Behaviors;
 using KuCloud.Infrastructure.Data;
 using KuCloud.Infrastructure.Email;
-using KuCloud.UseCases.Contributors.Create;
+using KuCloud.Infrastructure.Services;
+using KuCloud.SharedKernel;
+using KuCloud.UseCases.Storages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,18 +26,15 @@ public static class InfrastructureServiceExtensions
         ConfigurationManager config,
         ILogger logger,
         string environmentName
-        )
+    )
     {
         services.AddMediatR();
 
-        var connectionString = config.GetConnectionString("KuCloud");
-        Guard.Against.Null(connectionString);
-        services.AddApplicationDbContext(connectionString);
+        services.AddDataContext(config);
 
-        services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-        services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
+        services.AddFileService(config, logger);
 
-        AddServiceByEnvironment(services, config, logger, environmentName);
+        services.AddServiceByEnvironment(config, logger, environmentName);
 
         logger.LogInformation("{Project} services registered", "Infrastructure");
 
@@ -46,8 +45,8 @@ public static class InfrastructureServiceExtensions
     {
         var mediatRAssemblies = new[]
         {
-            Assembly.GetAssembly(typeof(Contributor)),             // Core
-            Assembly.GetAssembly(typeof(CreateContributorCommand)) // UseCases
+            Assembly.GetAssembly(typeof(Folder)), // Core
+            Assembly.GetAssembly(typeof(CreateFolderCommand)) // UseCases
         };
 
         services.AddMediatR(cfg =>
@@ -58,6 +57,34 @@ public static class InfrastructureServiceExtensions
         // services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
         services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
+        return services;
+    }
+
+    private static IServiceCollection AddDataContext(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
+    {
+        var connectionString = configuration.GetConnectionString("KuCloud");
+        Guard.Against.Null(connectionString);
+        services.AddApplicationDbContext(connectionString);
+
+        services.AddScoped<IUnitOfWork, EfUnitOfWork>();
+
+        services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+        services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
+
+        return services;
+    }
+
+    private static IServiceCollection AddFileService(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        ILogger logger)
+    {
+        logger.LogInformation("File service registered: {FileServiceType}", nameof(LocalStorageService));
+        services.AddScoped<IFileService, LocalStorageService>();
+
         return services;
     }
 

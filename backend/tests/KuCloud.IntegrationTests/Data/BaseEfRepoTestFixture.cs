@@ -1,10 +1,8 @@
-﻿using Ardalis.SharedKernel;
-using KuCloud.Core.ContributorAggregate;
+﻿using KuCloud.Core.Domains.StorageAggregate;
 using KuCloud.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NSubstitute;
 
 namespace KuCloud.IntegrationTests.Data;
 
@@ -38,8 +36,8 @@ public abstract class BaseEfRepoTestFixture
         return builder.Options;
     }
 
-    protected EfRepository<Contributor> GetRepository()
+    protected EfRepository<Folder> GetRepository()
     {
-        return new EfRepository<Contributor>(DbContext);
+        return new EfRepository<Folder>(DbContext);
     }
 }
