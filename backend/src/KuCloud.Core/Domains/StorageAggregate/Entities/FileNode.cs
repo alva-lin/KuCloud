@@ -15,6 +15,7 @@ public sealed class FileNode : StorageNode
 
     public string ContentType => MimeUtility.GetMimeMapping(Name);
 
+    // TODO - 是否需要一个额外的 PathMap，来映射 FileNodeId -> Path
     public string Path { get; set; } = null!;
 
     public long Size { get; set; }
