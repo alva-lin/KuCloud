@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Ardalis.ListStartupServices;
 using FastEndpoints.Swagger;
 using KuCloud.Api;
@@ -41,7 +42,7 @@ builder.Services.AddFastEndpoints()
         o.ShortSchemaNames = true;
         o.SerializerSettings = s =>
         {
-            s.PropertyNamingPolicy = null;
+            s.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             s.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         };
     });
@@ -80,6 +81,7 @@ app.UseFastEndpoints(config =>
         ProblemDetails.Error.IndicateSeverity = true;
         config.Errors.UseProblemDetails();
 
+        config.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         config.Serializer.Options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         config.Serializer.Options.Converters.Add(new NullableUtcDateTimeConverter(isJsonSourceUtc: true));
         config.Serializer.Options.Converters.Add(new UtcDateTimeConverter(isJsonSourceUtc: true));
