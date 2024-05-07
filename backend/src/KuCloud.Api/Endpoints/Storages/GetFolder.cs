@@ -4,7 +4,7 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed record GetFolderRequest
 {
-    public const string Route = "/Storage/{Id}";
+    public const string Route = "/storage/{Id}";
 
     public long Id { get; set; }
 
