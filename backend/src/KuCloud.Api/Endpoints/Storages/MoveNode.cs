@@ -4,7 +4,7 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed record MoveNodeRequest
 {
-    public const string Route = "/Storage/Move";
+    public const string Route = "/storage/move";
 
     public long[] Ids { get; set; } = null!;
 

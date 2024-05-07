@@ -4,7 +4,7 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed record RestoreNodeRequest
 {
-    public const string Route = "/Storage/Restore";
+    public const string Route = "/storage/restore";
 
     public long[] Ids { get; set; } = null!;
 

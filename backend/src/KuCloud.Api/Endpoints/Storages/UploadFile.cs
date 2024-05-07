@@ -2,16 +2,16 @@ using KuCloud.UseCases.Storages;
 
 namespace KuCloud.Api.Endpoints.Storages;
 
-public sealed class UploadFileRequest
+public sealed record UploadFileRequest
 {
-    public const string Route = "/Storage/Upload";
+    public const string Route = "/storage/upload";
 
     public IFormFile File { get; set; } = null!;
 }
 
 public sealed record UploadFileResponse(string Path);
 
-public class UploadFile(IMediator mediator) :Endpoint<UploadFileRequest, UploadFileResponse>
+public sealed class UploadFile(IMediator mediator) :Endpoint<UploadFileRequest, UploadFileResponse>
 {
     public override void Configure()
     {

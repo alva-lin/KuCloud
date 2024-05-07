@@ -5,7 +5,7 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed record GetDeletedNodesRequest
 {
-    public const string Route = "/Storage/Deleted";
+    public const string Route = "/storage/deleted";
 
     public int Page { get; set; }
 

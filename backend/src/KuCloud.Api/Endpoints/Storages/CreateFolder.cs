@@ -4,7 +4,7 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed record CreateFolderRequest
 {
-    public const string Route = "/Storage/Create-Folder";
+    public const string Route = "/storage/create-folder";
 
     public string Name { get; set; } = null!;
 
@@ -21,7 +21,7 @@ public sealed class CreateFolderValidator : Validator<CreateFolderRequest>
     }
 }
 
-public class CreateFolder(IMediator mediator) : Endpoint<CreateFolderRequest, long>
+public sealed class CreateFolder(IMediator mediator) : Endpoint<CreateFolderRequest, long>
 {
     public override void Configure()
     {

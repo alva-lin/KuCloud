@@ -10,8 +10,7 @@ namespace KuCloud.Infrastructure.JsonConverters;
 /// <param name="formats">格式化字符串数组，转为 Json 时，默认使用第一个。如果为空，则为 "yyyy-MM-dd HH:mm:ss"</param>
 public class NullableDateTimeConverter(string[]? formats = null) : JsonConverter<DateTime?>
 {
-    private readonly string[] _formats =
-        (formats ?? []).Union(new[] {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-ddTHH:mm:ss"}).ToArray();
+    private readonly string[] _formats = (formats ?? [ ]).Union(new[] { "yyyy-MM-ddTHH:mm:ss.fffZ" }).ToArray();
 
     public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
