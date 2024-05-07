@@ -3,6 +3,7 @@ using Ardalis.ListStartupServices;
 using FastEndpoints.Swagger;
 using KuCloud.Api;
 using KuCloud.Infrastructure;
+using KuCloud.Infrastructure.JsonConverters;
 using Serilog;
 using Serilog.Extensions.Logging;
 
@@ -80,6 +81,9 @@ app.UseFastEndpoints(config =>
         config.Errors.UseProblemDetails();
 
         config.Serializer.Options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        config.Serializer.Options.Converters.Add(new NullableUtcDateTimeConverter(isJsonSourceUtc: true));
+        config.Serializer.Options.Converters.Add(new UtcDateTimeConverter(isJsonSourceUtc: true));
+        config.Serializer.Options.Converters.Add(new TimeSpanConverter());
     })
     .UseSwaggerGen(); // Includes AddFileServer and static files middleware
 
