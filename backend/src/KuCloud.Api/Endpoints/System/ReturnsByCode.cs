@@ -1,11 +1,11 @@
 namespace KuCloud.Api.Endpoints.System;
 
-public class ReturnsByCodeRequest
+public sealed record ReturnsByCodeRequest
 {
     public int Code { get; set; }
 }
 
-public class ReturnsByCode : Endpoint<ReturnsByCodeRequest, EmptyResponse>
+public sealed class ReturnsByCode : Endpoint<ReturnsByCodeRequest, EmptyResponse>
 {
     public override void Configure()
     {

@@ -1,6 +1,6 @@
 namespace KuCloud.Api.Endpoints;
 
-public class Status(AppStatusMonitor monitor) : EndpointWithoutRequest<AppStatusInfo>
+public sealed class Status(AppStatusMonitor monitor) : EndpointWithoutRequest<AppStatusInfo>
 {
     public override void Configure()
     {

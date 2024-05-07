@@ -11,7 +11,7 @@ public sealed record GetFolderRequest
     public static string BuildRoute(long id) => Route.Replace("{Id}", id.ToString());
 }
 
-public class GetFolder(IMediator mediator) : Endpoint<GetFolderRequest, FolderDto>
+public sealed class GetFolder(IMediator mediator) : Endpoint<GetFolderRequest, FolderDto>
 {
     public override void Configure()
     {

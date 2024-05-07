@@ -1,6 +1,6 @@
 namespace KuCloud.Api.Endpoints;
 
-public class HealthCheck : EndpointWithoutRequest<EmptyResponse>
+public sealed class HealthCheck : EndpointWithoutRequest<EmptyResponse>
 {
     public override void Configure()
     {

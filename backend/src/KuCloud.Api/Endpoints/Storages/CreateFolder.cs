@@ -21,7 +21,7 @@ public sealed class CreateFolderValidator : Validator<CreateFolderRequest>
     }
 }
 
-public class CreateFolder(IMediator mediator) : Endpoint<CreateFolderRequest, long>
+public sealed class CreateFolder(IMediator mediator) : Endpoint<CreateFolderRequest, long>
 {
     public override void Configure()
     {
