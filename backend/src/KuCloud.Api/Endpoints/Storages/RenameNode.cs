@@ -4,7 +4,7 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed record RenameNodeRequest
 {
-    public const string Route = "/Storage/Rename";
+    public const string Route = "/storage/rename";
 
     public long Id { get; set; }
 

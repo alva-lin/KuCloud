@@ -11,8 +11,7 @@ namespace KuCloud.Infrastructure.JsonConverters;
 /// <param name="formats">时间解析格式</param>
 public class UtcDateTimeConverter(bool isJsonSourceUtc = false, string[]? formats = null) : JsonConverter<DateTime>
 {
-    private readonly string[] _formats =
-        (formats ?? []).Union(new[] {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-ddTHH:mm:ss"}).ToArray();
+    private readonly string[] _formats = (formats ?? [ ]).Union(new[] { "yyyy-MM-ddTHH:mm:ss.fffZ" }).ToArray();
 
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

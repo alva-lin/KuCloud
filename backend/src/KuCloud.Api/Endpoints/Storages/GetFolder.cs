@@ -4,14 +4,14 @@ namespace KuCloud.Api.Endpoints.Storages;
 
 public sealed record GetFolderRequest
 {
-    public const string Route = "/Storage/{Id}";
+    public const string Route = "/storage/{Id}";
 
     public long Id { get; set; }
 
     public static string BuildRoute(long id) => Route.Replace("{Id}", id.ToString());
 }
 
-public class GetFolder(IMediator mediator) : Endpoint<GetFolderRequest, FolderDto>
+public sealed class GetFolder(IMediator mediator) : Endpoint<GetFolderRequest, FolderDto>
 {
     public override void Configure()
     {
