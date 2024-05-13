@@ -1,29 +1,17 @@
 'use client';
 
-import { useCallback } from 'react';
-
-import { Button, Group, useMantineColorScheme } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
+import { ActionIcon, useMantineColorScheme } from '@mantine/core';
 
 export function ColorSchemeToggle() {
-  const { setColorScheme } = useMantineColorScheme();
-
-  const changeColorScheme = useCallback(
-    (scheme: 'light' | 'dark' | 'auto') => {
-      notifications.show({
-        title: 'Color scheme changed',
-        message: `Switched to ${scheme} color scheme`,
-      });
-      setColorScheme(scheme);
-    },
-    [setColorScheme]
-  );
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
-    <Group justify="center" mt="xl">
-      <Button onClick={() => changeColorScheme('light')}>Light</Button>
-      <Button onClick={() => changeColorScheme('dark')}>Dark</Button>
-      <Button onClick={() => changeColorScheme('auto')}>Auto</Button>
-    </Group>
+    <ActionIcon variant="default" onClick={() => toggleColorScheme()}>
+      {colorScheme === 'dark' ? (
+        <span className="i-fluent-weather-moon-24-regular" role="img" />
+      ) : (
+        <span className="i-fluent-weather-sunny-24-regular" role="img" />
+      )}
+    </ActionIcon>
   );
 }
