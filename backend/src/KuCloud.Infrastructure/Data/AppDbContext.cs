@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using Ardalis.SharedKernel;
-using KuCloud.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;

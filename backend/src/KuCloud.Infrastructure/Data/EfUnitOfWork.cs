@@ -1,4 +1,3 @@
-using KuCloud.SharedKernel;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace KuCloud.Infrastructure.Data;

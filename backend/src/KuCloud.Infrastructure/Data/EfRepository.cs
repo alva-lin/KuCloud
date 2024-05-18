@@ -1,5 +1,4 @@
-﻿using Ardalis.SharedKernel;
-using Ardalis.Specification.EntityFrameworkCore;
+﻿using Ardalis.Specification.EntityFrameworkCore;
 
 namespace KuCloud.Infrastructure.Data;
 

@@ -1,13 +1,11 @@
 ﻿using System.Reflection;
 using Ardalis.GuardClauses;
-using Ardalis.SharedKernel;
 using KuCloud.Core.Domains.StorageAggregate;
 using KuCloud.Core.Interfaces;
 using KuCloud.Infrastructure.Behaviors;
 using KuCloud.Infrastructure.Data;
 using KuCloud.Infrastructure.Email;
 using KuCloud.Infrastructure.Services;
-using KuCloud.SharedKernel;
 using KuCloud.UseCases.Storages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
