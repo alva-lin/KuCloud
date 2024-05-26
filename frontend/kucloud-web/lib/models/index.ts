@@ -5,8 +5,7 @@ export { StorageTypeList } from './storage';
 export type { StorageType, StorageNodeDto, AncestorInfo, FolderDto } from './storage';
 
 export interface AuditRecord {
-  creationTime: Date;
-  modifiedTime?: Date;
+  lastUpdateTime: Date;
   deletionTime?: Date;
   isDelete: boolean;
 }
