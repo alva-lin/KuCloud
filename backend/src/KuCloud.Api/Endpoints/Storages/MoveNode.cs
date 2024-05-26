@@ -8,7 +8,7 @@ public sealed record MoveNodeRequest
 
     public long[] Ids { get; set; } = null!;
 
-    public long FolderId { get; set; }
+    public long ParentId { get; set; }
 }
 
 public sealed class MoveNode(IMediator mediator) : Endpoint<MoveNodeRequest>
@@ -20,7 +20,7 @@ public sealed class MoveNode(IMediator mediator) : Endpoint<MoveNodeRequest>
         Summary(
             s => {
                 s.Summary = "Move nodes to new folder";
-                s.ExampleRequest = new MoveNodeRequest { Ids = [ 1L, 2L ], FolderId = 3L };
+                s.ExampleRequest = new MoveNodeRequest { Ids = [ 1L, 2L ], ParentId = 3L };
             }
         );
         Description(
@@ -32,7 +32,7 @@ public sealed class MoveNode(IMediator mediator) : Endpoint<MoveNodeRequest>
 
     public override async Task HandleAsync(MoveNodeRequest req, CancellationToken ct)
     {
-        var result = await mediator.Send(new MoveNodeCommand(req.Ids, req.FolderId), ct);
+        var result = await mediator.Send(new MoveNodeCommand(req.Ids, req.ParentId), ct);
 
         this.CheckResult(result);
 

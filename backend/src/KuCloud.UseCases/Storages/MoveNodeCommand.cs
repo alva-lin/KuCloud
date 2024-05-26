@@ -2,7 +2,12 @@ using KuCloud.Core.Domains.StorageAggregate;
 
 namespace KuCloud.UseCases.Storages;
 
-public sealed record MoveNodeCommand(long[] Ids, long NewParentId) : ICommand<Result>;
+/// <summary>
+///     move multiple nodes to a new parent folder
+/// </summary>
+/// <param name="Ids">list of ids of nodes to be moved</param>
+/// <param name="FolderId">new parent folder Id</param>
+public sealed record MoveNodeCommand(long[] Ids, long FolderId) : ICommand<Result>;
 
 public sealed class MoveNodeHandler(
     ILogger<MoveNodeHandler> logger,
@@ -22,12 +27,12 @@ public sealed class MoveNodeHandler(
         }
 
         var newParent = await folderRepos.SingleOrDefaultAsync(
-            new SingleFolderById(request.NewParentId, includeChildren: true),
+            new SingleFolderById(request.FolderId, includeChildren: true),
             ct
         );
         if (newParent is null)
         {
-            logger.LogWarning("New parent folder [{Id}] not found", request.NewParentId);
+            logger.LogWarning("New parent folder [{Id}] not found", request.FolderId);
             return Result.NotFound("New parent folder not found");
         }
 
@@ -41,7 +46,7 @@ public sealed class MoveNodeHandler(
         logger.LogInformation(
             "Move nodes [{Ids}] to new parent [{ParentId}]",
             string.Join(", ", request.Ids),
-            request.NewParentId
+            request.FolderId
         );
 
         return Result.Success();

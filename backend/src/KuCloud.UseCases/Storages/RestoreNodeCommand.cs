@@ -2,7 +2,12 @@ using KuCloud.Core.Domains.StorageAggregate;
 
 namespace KuCloud.UseCases.Storages;
 
-public sealed record RestoreNodeCommand(long[] Ids, long NewParentId) : ICommand<Result>;
+/// <summary>
+///     restore multiple nodes and move them to a new parent folder
+/// </summary>
+/// <param name="Ids">list of ids of nodes to be restored</param>
+/// <param name="FolderId">new parent folder id</param>
+public sealed record RestoreNodeCommand(long[] Ids, long FolderId) : ICommand<Result>;
 
 public sealed class RestoreNodeHandler(
     ILogger<RestoreNodeHandler> logger,
@@ -35,14 +40,14 @@ public sealed class RestoreNodeHandler(
             await repos.UpdateRangeAsync(nodes, cancellationToken);
 
             // 移动到指定文件夹
-            var moveCommand = new MoveNodeCommand(request.Ids, request.NewParentId);
+            var moveCommand = new MoveNodeCommand(request.Ids, request.FolderId);
             var result = await mediator.Send(moveCommand, cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
             logger.LogInformation(
                 "Nodes [{Ids}] restored and moved to parent [{ParentId}]",
                 request.Ids,
-                request.NewParentId
+                request.FolderId
             );
 
             return result;

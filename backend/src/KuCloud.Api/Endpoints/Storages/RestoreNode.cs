@@ -8,7 +8,7 @@ public sealed record RestoreNodeRequest
 
     public long[] Ids { get; set; } = null!;
 
-    public long FolderId { get; set; }
+    public long ParentId { get; set; }
 }
 
 public sealed class RestoreNode(IMediator mediator) : Endpoint<RestoreNodeRequest>
@@ -19,8 +19,8 @@ public sealed class RestoreNode(IMediator mediator) : Endpoint<RestoreNodeReques
         AllowAnonymous();
         Summary(
             s => {
-                s.Summary = "Restore a file";
-                s.ExampleRequest = new RestoreNodeRequest { Ids = [ 1L, 2L ], FolderId = 3L };
+                s.Summary = "Restore multiple nodes from trash, and move them to a new folder";
+                s.ExampleRequest = new RestoreNodeRequest { Ids = [ 1L, 2L ], ParentId = 3L };
             }
         );
         Description(
@@ -32,7 +32,7 @@ public sealed class RestoreNode(IMediator mediator) : Endpoint<RestoreNodeReques
 
     public override async Task HandleAsync(RestoreNodeRequest req, CancellationToken ct)
     {
-        var result = await mediator.Send(new RestoreNodeCommand(req.Ids, req.FolderId), ct);
+        var result = await mediator.Send(new RestoreNodeCommand(req.Ids, req.ParentId), ct);
 
         this.CheckResult(result);
 

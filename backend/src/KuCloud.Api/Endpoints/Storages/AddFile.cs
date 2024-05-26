@@ -6,7 +6,7 @@ public sealed record AddFileRequest
 {
     public const string Route = "storage/add-file";
 
-    public long FolderId { get; set; }
+    public long ParentId { get; set; }
 
     public string Path { get; set; } = null!;
 
@@ -17,7 +17,7 @@ public sealed class AddFileValidator : Validator<AddFileRequest>
 {
     public AddFileValidator()
     {
-        RuleFor(x => x.FolderId).GreaterThan(0);
+        RuleFor(x => x.ParentId).GreaterThan(0);
 
         RuleFor(x => x.Path).NotEmpty();
 
@@ -34,7 +34,7 @@ public sealed class AddFile(IMediator mediator) : Endpoint<AddFileRequest, long>
         Summary(
             s => {
                 s.Summary = "Add a file";
-                s.ExampleRequest = new AddFileRequest { FolderId = 1, Path = "/path/to/file", Name = "file.txt" };
+                s.ExampleRequest = new AddFileRequest { ParentId = 1, Path = "/path/to/file", Name = "file.txt" };
             }
         );
         Description(
@@ -46,7 +46,7 @@ public sealed class AddFile(IMediator mediator) : Endpoint<AddFileRequest, long>
 
     public override async Task HandleAsync(AddFileRequest req, CancellationToken ct)
     {
-        var result = await mediator.Send(new AddFileCommand(req.FolderId, req.Path, req.Name), ct);
+        var result = await mediator.Send(new AddFileCommand(req.ParentId, req.Path, req.Name), ct);
 
         this.CheckResult(result);
 
