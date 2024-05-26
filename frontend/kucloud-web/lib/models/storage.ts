@@ -4,9 +4,8 @@ export type StorageType = 'Folder' | 'File';
 
 export const StorageTypeList: StorageType[] = ['Folder', 'File'];
 
-export interface StorageNodeDto extends BasicDto {
+interface InnerStorageNodeDto extends BasicDto {
   id: number;
-  type: StorageType;
   name: string;
   size: number;
 }
@@ -17,9 +16,15 @@ export interface AncestorInfo {
   level: number;
 }
 
-export interface FolderDto extends StorageNodeDto {
+export type FolderDto = InnerStorageNodeDto & {
   type: 'Folder';
   isRoot: number;
   ancestors: AncestorInfo[];
   children: StorageNodeDto[];
-}
+};
+
+export type FileDto = InnerStorageNodeDto & {
+  type: 'File';
+};
+
+export type StorageNodeDto = FolderDto | FileDto;
