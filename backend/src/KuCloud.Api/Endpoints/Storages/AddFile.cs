@@ -31,11 +31,17 @@ public sealed class AddFile(IMediator mediator) : Endpoint<AddFileRequest, long>
     {
         Post(AddFileRequest.Route);
         AllowAnonymous();
-        Summary(s =>
-        {
-            s.Summary = "Add a file";
-            s.ExampleRequest = new AddFileRequest { FolderId = 1, Path = "/path/to/file", Name = "file.txt" };
-        });
+        Summary(
+            s => {
+                s.Summary = "Add a file";
+                s.ExampleRequest = new AddFileRequest { FolderId = 1, Path = "/path/to/file", Name = "file.txt" };
+            }
+        );
+        Description(
+            b => b.ClearDefaultProduces()
+                .Produces(StatusCodes.Status204NoContent)
+                .ProducesProblemDetails(StatusCodes.Status404NotFound)
+        );
     }
 
     public override async Task HandleAsync(AddFileRequest req, CancellationToken ct)

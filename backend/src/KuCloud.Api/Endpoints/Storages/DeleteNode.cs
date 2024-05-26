@@ -15,11 +15,13 @@ public sealed class DeleteNode(IMediator mediator) : Endpoint<DeleteNodeRequest>
     {
         Post(DeleteNodeRequest.Route);
         AllowAnonymous();
-        Summary(s =>
-        {
-            s.Summary = "Delete nodes";
-            s.ExampleRequest = new DeleteNodeRequest { Ids = [ 1, 2 ] };
-        });
+        Summary(
+            s => {
+                s.Summary = "Delete nodes";
+                s.ExampleRequest = new DeleteNodeRequest { Ids = [ 1, 2 ] };
+            }
+        );
+        Description(b => b.ClearDefaultProduces().Produces(StatusCodes.Status204NoContent));
     }
 
     public override async Task HandleAsync(DeleteNodeRequest req, CancellationToken ct)

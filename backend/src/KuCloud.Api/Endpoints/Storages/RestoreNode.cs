@@ -17,10 +17,17 @@ public sealed class RestoreNode(IMediator mediator) : Endpoint<RestoreNodeReques
     {
         Post(RestoreNodeRequest.Route);
         AllowAnonymous();
-        Summary(s =>
-        {
-            s.Summary = "Restore a file";
-        });
+        Summary(
+            s => {
+                s.Summary = "Restore a file";
+                s.ExampleRequest = new RestoreNodeRequest { Ids = [ 1L, 2L ], FolderId = 3L };
+            }
+        );
+        Description(
+            b => b.ClearDefaultProduces()
+                .Produces(StatusCodes.Status204NoContent)
+                .ProducesProblemDetails(StatusCodes.Status404NotFound)
+        );
     }
 
     public override async Task HandleAsync(RestoreNodeRequest req, CancellationToken ct)

@@ -17,7 +17,12 @@ public sealed class GetFolder(IMediator mediator) : Endpoint<GetFolderRequest, F
     {
         Get(GetFolderRequest.Route);
         AllowAnonymous();
-        Summary(s => { s.Summary = "Get a folder"; });
+        Summary(
+            s => {
+                s.Summary = "Get a folder";
+            }
+        );
+        Description(b => b.ClearDefaultProduces().Produces<FolderDto>());
     }
 
     public override async Task HandleAsync(GetFolderRequest req, CancellationToken ct)

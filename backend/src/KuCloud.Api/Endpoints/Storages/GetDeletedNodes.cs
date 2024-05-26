@@ -1,4 +1,3 @@
-using KuCloud.SharedKernel;
 using KuCloud.UseCases.Storages;
 
 namespace KuCloud.Api.Endpoints.Storages;
@@ -18,22 +17,21 @@ public sealed class GetDeletedNodesValidator : Validator<GetDeletedNodesRequest>
 {
     public GetDeletedNodesValidator()
     {
-        RuleFor(x => x.Page)
-            .GreaterThan(0);
+        RuleFor(x => x.Page).GreaterThan(0);
 
-        RuleFor(x => x.PageSize)
-            .GreaterThan(0);
+        RuleFor(x => x.PageSize).GreaterThan(0);
     }
 }
 
 public sealed class GetDeletedNodes(IMediator mediator)
-    : Endpoint<GetDeletedNodesRequest, Result<PaginatedList<StorageNodeDto>>>
+    : Endpoint<GetDeletedNodesRequest, PaginatedList<StorageNodeDto>>
 {
     public override void Configure()
     {
         Get(GetDeletedNodesRequest.Route);
         AllowAnonymous();
         Summary(s => { s.Summary = "Get deleted nodes"; });
+        Description(b => b.ClearDefaultProduces().Produces<PaginatedList<StorageNodeDto>>());
     }
 
     public override async Task HandleAsync(GetDeletedNodesRequest req, CancellationToken ct)

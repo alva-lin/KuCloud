@@ -17,6 +17,11 @@ public sealed class UploadFile(IMediator mediator) : Endpoint<UploadFileRequest,
         AllowAnonymous();
         AllowFileUploads();
         Summary(s => { s.Summary = "Upload a file"; });
+        Description(
+            b => b.ClearDefaultProduces()
+                .Produces<string>()
+                .ProducesProblemDetails(StatusCodes.Status500InternalServerError)
+        );
     }
 
     public override async Task HandleAsync(UploadFileRequest req, CancellationToken ct)

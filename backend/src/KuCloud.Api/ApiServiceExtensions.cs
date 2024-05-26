@@ -1,6 +1,4 @@
-﻿using Ardalis.GuardClauses;
-
-namespace KuCloud.Api;
+﻿namespace KuCloud.Api;
 
 public static class ApiServiceExtensions
 {

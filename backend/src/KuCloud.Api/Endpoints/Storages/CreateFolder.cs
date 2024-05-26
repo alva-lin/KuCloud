@@ -15,9 +15,7 @@ public sealed class CreateFolderValidator : Validator<CreateFolderRequest>
 {
     public CreateFolderValidator()
     {
-        RuleFor(x => x.Name)
-            .NotEmpty()
-            .MaximumLength(DataSchemaConstants.DefaultNodeNameLength);
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(DataSchemaConstants.DefaultNodeNameLength);
     }
 }
 
@@ -27,11 +25,18 @@ public sealed class CreateFolder(IMediator mediator) : Endpoint<CreateFolderRequ
     {
         Post(CreateFolderRequest.Route);
         AllowAnonymous();
-        Summary(s =>
-        {
-            s.Summary = "Create a folder";
-            s.ExampleRequest = new CreateFolderRequest { Name = "New Folder", ParentId = null };
-        });
+        Summary(
+            s => {
+                s.Summary = "Create a folder";
+                s.ExampleRequest = new CreateFolderRequest { Name = "New Folder", ParentId = null };
+            }
+        );
+        Description(
+            b => b.ClearDefaultProduces()
+                .Produces<long>()
+                .ProducesProblemDetails(StatusCodes.Status404NotFound)
+                .ProducesProblemDetails(StatusCodes.Status409Conflict)
+        );
     }
 
     public override async Task HandleAsync(CreateFolderRequest req, CancellationToken ct)
@@ -39,9 +44,6 @@ public sealed class CreateFolder(IMediator mediator) : Endpoint<CreateFolderRequ
         var result = await mediator.Send(new CreateFolderCommand(req.Name, req.ParentId), ct);
 
         this.CheckResult(result);
-        await SendCreatedAtAsync<GetFolder>(
-            new { Id = result.Value.Id },
-            result.Value.Id,
-            cancellation: ct);
+        await SendCreatedAtAsync<GetFolder>(new { Id = result.Value.Id }, result.Value.Id, cancellation: ct);
     }
 }

@@ -17,11 +17,18 @@ public sealed class RenameNode(IMediator mediator) : Endpoint<RenameNodeRequest>
     {
         Post(RenameNodeRequest.Route);
         AllowAnonymous();
-        Summary(s =>
-        {
-            s.Summary = "Rename a file";
-            s.ExampleRequest = new RenameNodeRequest { Id = 1, Name = "newname.txt" };
-        });
+        Summary(
+            s => {
+                s.Summary = "Rename a file";
+                s.ExampleRequest = new RenameNodeRequest { Id = 1, Name = "newname.txt" };
+            }
+        );
+        Description(
+            b => b.ClearDefaultProduces()
+                .Produces(StatusCodes.Status204NoContent)
+                .ProducesProblemDetails(StatusCodes.Status404NotFound)
+                .ProducesProblemDetails(StatusCodes.Status409Conflict)
+        );
     }
 
     public override async Task HandleAsync(RenameNodeRequest req, CancellationToken ct)

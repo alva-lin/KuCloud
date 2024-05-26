@@ -17,7 +17,17 @@ public sealed class MoveNode(IMediator mediator) : Endpoint<MoveNodeRequest>
     {
         Post(MoveNodeRequest.Route);
         AllowAnonymous();
-        Summary(s => { s.Summary = "Move nodes to new folder"; });
+        Summary(
+            s => {
+                s.Summary = "Move nodes to new folder";
+                s.ExampleRequest = new MoveNodeRequest { Ids = [ 1L, 2L ], FolderId = 3L };
+            }
+        );
+        Description(
+            b => b.ClearDefaultProduces()
+                .Produces(StatusCodes.Status204NoContent)
+                .ProducesProblemDetails(StatusCodes.Status404NotFound)
+        );
     }
 
     public override async Task HandleAsync(MoveNodeRequest req, CancellationToken ct)
