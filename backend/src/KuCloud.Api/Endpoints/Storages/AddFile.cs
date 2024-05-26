@@ -17,19 +17,15 @@ public sealed class AddFileValidator : Validator<AddFileRequest>
 {
     public AddFileValidator()
     {
-        RuleFor(x => x.FolderId)
-            .GreaterThan(0);
+        RuleFor(x => x.FolderId).GreaterThan(0);
 
-        RuleFor(x => x.Path)
-            .NotEmpty();
+        RuleFor(x => x.Path).NotEmpty();
 
-        RuleFor(x => x.Name)
-            .NotEmpty()
-            .MaximumLength(DataSchemaConstants.DefaultNodeNameLength);
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(DataSchemaConstants.DefaultNodeNameLength);
     }
 }
 
-public sealed class AddFile(IMediator mediator) : Endpoint<AddFileRequest>
+public sealed class AddFile(IMediator mediator) : Endpoint<AddFileRequest, long>
 {
     public override void Configure()
     {
@@ -48,6 +44,6 @@ public sealed class AddFile(IMediator mediator) : Endpoint<AddFileRequest>
 
         this.CheckResult(result);
 
-        await SendOkAsync(ct);
+        await SendOkAsync(result.Value, ct);
     }
 }

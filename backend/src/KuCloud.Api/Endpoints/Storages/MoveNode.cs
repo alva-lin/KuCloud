@@ -26,6 +26,6 @@ public sealed class MoveNode(IMediator mediator) : Endpoint<MoveNodeRequest>
 
         this.CheckResult(result);
 
-        await SendOkAsync(ct);
+        await SendNoContentAsync(ct);
     }
 }

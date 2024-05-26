@@ -9,19 +9,14 @@ public sealed record UploadFileRequest
     public IFormFile File { get; set; } = null!;
 }
 
-public sealed record UploadFileResponse(string Path);
-
-public sealed class UploadFile(IMediator mediator) :Endpoint<UploadFileRequest, UploadFileResponse>
+public sealed class UploadFile(IMediator mediator) : Endpoint<UploadFileRequest, string>
 {
     public override void Configure()
     {
         Post(UploadFileRequest.Route);
         AllowAnonymous();
         AllowFileUploads();
-        Summary(s =>
-        {
-            s.Summary = "Upload a file";
-        });
+        Summary(s => { s.Summary = "Upload a file"; });
     }
 
     public override async Task HandleAsync(UploadFileRequest req, CancellationToken ct)
@@ -31,6 +26,6 @@ public sealed class UploadFile(IMediator mediator) :Endpoint<UploadFileRequest, 
 
         this.CheckResult(result);
 
-        await SendOkAsync(new UploadFileResponse(result.Value),ct);
+        await SendOkAsync(result.Value, ct);
     }
 }

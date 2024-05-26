@@ -28,6 +28,6 @@ public sealed class DeleteNode(IMediator mediator) : Endpoint<DeleteNodeRequest>
 
         this.CheckResult(result);
 
-        await SendOkAsync(ct);
+        await SendNoContentAsync(ct);
     }
 }

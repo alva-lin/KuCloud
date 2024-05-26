@@ -29,6 +29,6 @@ public sealed class RestoreNode(IMediator mediator) : Endpoint<RestoreNodeReques
 
         this.CheckResult(result);
 
-        await SendOkAsync(ct);
+        await SendNoContentAsync(ct);
     }
 }

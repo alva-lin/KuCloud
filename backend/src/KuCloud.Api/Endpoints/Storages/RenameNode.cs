@@ -30,6 +30,6 @@ public sealed class RenameNode(IMediator mediator) : Endpoint<RenameNodeRequest>
 
         this.CheckResult(result);
 
-        await SendOkAsync(ct);
+        await SendNoContentAsync(ct);
     }
 }
