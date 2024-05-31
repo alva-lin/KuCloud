@@ -26,9 +26,9 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MyMantineProvider>
-          <MyQueryClientProvider>{children}</MyQueryClientProvider>
-        </MyMantineProvider>
+        <MyQueryClientProvider>
+          <MyMantineProvider>{children}</MyMantineProvider>
+        </MyQueryClientProvider>
       </body>
     </html>
   );

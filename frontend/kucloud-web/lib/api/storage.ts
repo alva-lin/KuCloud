@@ -10,6 +10,10 @@ export async function getFolder(params: { id: number }): Promise<FolderDto> {
   return resp.data;
 }
 
+export function getFolderQueryKey(params: { id: number }): string[] {
+  return ['folder', params.id.toString()];
+}
+
 export async function addFolder(params: { name: string; parentId?: number }): Promise<number> {
   const resp = await myAxios<number>(`${baseUrl}/create-folder`, {
     method: 'POST',

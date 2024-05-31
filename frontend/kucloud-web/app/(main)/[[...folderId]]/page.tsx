@@ -6,12 +6,9 @@ import { useRouter } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 
+import { Navigator, StorageNodeList, ToolBar } from '@/components/Folder';
 import { Api } from '@/lib/api';
 import { StorageNodeDto } from '@/lib/models';
-
-import Navigator from './Navigator';
-import StorageNodeList from './StorageNodeList';
-import ToolBar from './ToolBar';
 
 export default function HomePage({ params }: { params: { folderId?: string[] } }) {
   const router = useRouter();
@@ -19,8 +16,8 @@ export default function HomePage({ params }: { params: { folderId?: string[] } }
     params.folderId ? parseInt(params.folderId[0], 10) : 1
   );
   const [selection, setSelection] = useState<StorageNodeDto[]>([]);
-  const { data: folder } = useQuery({
-    queryKey: ['folder', folderId],
+  const { data: folder, refetch } = useQuery({
+    queryKey: Api.Storage.getFolderQueryKey({ id: folderId }),
     queryFn: () => Api.Storage.getFolder({ id: folderId }),
   });
 
@@ -36,7 +33,7 @@ export default function HomePage({ params }: { params: { folderId?: string[] } }
 
   return (
     <>
-      <ToolBar folder={folder} selection={selection} />
+      <ToolBar folder={folder} selection={selection} refresh={refetch} />
       <Navigator name={folder.name} ancestors={folder.ancestors} onClick={setFolderId} />
       <StorageNodeList
         nodes={folder.children}

@@ -3,16 +3,7 @@
 import { useState } from 'react';
 
 import { notifications } from '@mantine/notifications';
-import {
-  Mutation,
-  MutationCache,
-  MutationMeta,
-  Query,
-  QueryCache,
-  QueryClient,
-  QueryClientProvider,
-  QueryMeta,
-} from '@tanstack/react-query';
+import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AxiosError } from 'axios';
 
@@ -24,22 +15,14 @@ declare module '@tanstack/react-query' {
   }
 }
 
-const onErrorHandler = (
-  error: AxiosError<ProblemDetails>,
-  context: { get meta(): QueryMeta | MutationMeta | undefined }
-) => {
+const onErrorHandler = (error: AxiosError<ProblemDetails>) => {
   if (error.response) {
     const problemDetail = error.response.data;
 
-    const title = context.meta?.errorTitle
-      ? (context.meta.errorTitle as string)
-      : problemDetail.status >= 500
-        ? 'Server Error'
-        : problemDetail.title;
+    const title = problemDetail.status >= 500 ? 'Server Error' : problemDetail.title;
 
-    const message = context.meta?.errorMessage
-      ? (context.meta.errorMessage as string)
-      : problemDetail.status >= 500
+    const message =
+      problemDetail.status >= 500
         ? 'oops, there are some errors in the server, please try again later'
         : 'there are some errors in your request, please check your input';
 
@@ -49,36 +32,6 @@ const onErrorHandler = (
       color: 'red',
     });
   }
-};
-
-const onMutationSuccessHandler = (context: { get meta(): MutationMeta | undefined }) => {
-  if (context.meta?.successTitle) {
-    const title = context.meta.successTitle as string;
-    const message = context.meta.successMessage as string;
-    notifications.show({
-      title,
-      message,
-      color: 'green',
-    });
-  }
-};
-
-export const globalQueryOnErrorHandler = (
-  error: AxiosError<ProblemDetails>,
-  query: Query<unknown, unknown, unknown>
-) => {
-  onErrorHandler(error, query);
-};
-
-export const globalMutationOnErrorHandler = (
-  error: AxiosError<ProblemDetails>,
-  variables: unknown,
-  context: unknown,
-  mutation: Mutation<unknown, unknown, unknown>
-): Promise<unknown> | unknown => {
-  onErrorHandler(error, mutation);
-
-  return Promise.reject(error);
 };
 
 export function MyQueryClientProvider({ children }: { children: React.ReactNode }) {
@@ -93,23 +46,15 @@ export function MyQueryClientProvider({ children }: { children: React.ReactNode 
           },
           mutations: {
             // can be overridden on each mutation
-            // onError: (error, variables, context) => {
-            // },
+            onError: (error) => {
+              onErrorHandler(error);
+              return error;
+            },
           },
         },
         queryCache: new QueryCache({
-          onError: (error, query) => {
-            onErrorHandler(error, query);
-          },
-        }),
-        mutationCache: new MutationCache({
-          // global handler, will always be called
-          onError: (error, variables, context, mutation) => {
-            onErrorHandler(error, mutation);
-            return error;
-          },
-          onSuccess: (data, variables, context, mutation) => {
-            onMutationSuccessHandler(mutation);
+          onError: (error) => {
+            onErrorHandler(error);
           },
         }),
       })

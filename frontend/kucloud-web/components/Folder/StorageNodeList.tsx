@@ -6,7 +6,7 @@ import cx from 'clsx';
 import { StorageNodeDto } from '@/lib/models';
 import { formatDate, formatFileSize } from '@/lib/utils';
 
-import classes from './TableSelection.module.css';
+import classes from './StorageNodeList.module.css';
 
 export default function StorageNodeList(props: {
   nodes: StorageNodeDto[];
