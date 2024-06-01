@@ -9,7 +9,7 @@ const siteTheme = createTheme({
 export function MyMantineProvider({ children }: { children: React.ReactNode }) {
   return (
     <MantineProvider theme={siteTheme}>
-      <Notifications autoClose={5000} position="bottom-right" />
+      <Notifications autoClose={5000} position="top-right" />
       <ModalsProvider>{children}</ModalsProvider>
     </MantineProvider>
   );

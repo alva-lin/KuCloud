@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Checkbox, Group, ScrollArea, Table, Text, rem } from '@mantine/core';
 import cx from 'clsx';
@@ -26,7 +26,12 @@ export default function StorageNodeList(props: {
     props.onSelectionChange && props.onSelectionChange(selection);
   }, [selection]);
 
-  const rows = nodes.map((item) => {
+  const sortedNodes = useMemo(() => {
+    const folders = nodes.filter((item) => item.type === 'Folder');
+    const files = nodes.filter((item) => item.type === 'File');
+    return [...folders, ...files];
+  }, [nodes]);
+  const rows = sortedNodes.map((item) => {
     const selected = selection.includes(item);
     return (
       <Table.Tr key={item.id} className={cx({ [classes.rowSelected]: selected })}>

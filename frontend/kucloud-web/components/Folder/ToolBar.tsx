@@ -2,11 +2,12 @@ import React, { useCallback } from 'react';
 
 import { Button } from '@mantine/core';
 
+import UploadFileButton from '@/components/Folder/UploadFileButton';
 import { Api } from '@/lib/api';
 import { useContextModal } from '@/lib/hooks/useContextModal';
 import { FolderDto, StorageNodeDto } from '@/lib/models';
 
-import CreateFolderForm from './CreateFolderModal';
+import CreateFolderForm from './CreateFolderForm';
 
 export default function ToolBar(props: {
   folder: FolderDto;
@@ -57,7 +58,7 @@ export default function ToolBar(props: {
       <div className="flex justify-between items-center">
         <div className="flex gap-4 items-center">
           <Button onClick={openCreateModal}>Add Folder</Button>
-          <Button>Upload File</Button>
+          <UploadFileButton parentId={folder.id} />
           {singleSelection && firstSelection?.type === 'File' && (
             <Button onClick={download}>Download</Button>
           )}
