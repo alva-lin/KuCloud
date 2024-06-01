@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using KuCloud.SharedKernel.Extensions;
 
 namespace KuCloud.Core.Domains.StorageAggregate;
 
@@ -103,15 +104,15 @@ public sealed class Folder : StorageNode
     {
         var hasSameName = (StorageNode e) => e.Type == node.Type && e.Id != node.Id && e.Name == node.Name;
 
-        if (_children.All(e => !hasSameName(e))) return;
+        if (!_children.Any(hasSameName)) return;
 
         if (!autoRename) throw new InvalidOperationException("The name already exists");
 
         var index = 1;
-        var originName = node.Name;
+        var originalName = node.Name;
         while (_children.Any(hasSameName))
         {
-            node.Name = $"{originName} ({index++})";
+            node.Name = originalName.WithIndex(index++);
         }
     }
 

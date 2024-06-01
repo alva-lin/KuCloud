@@ -19,4 +19,8 @@ public sealed class FileNode : StorageNode
     public string Path { get; set; } = null!;
 
     public long Size { get; set; }
+
+    public string NameWithoutExtension => System.IO.Path.GetFileNameWithoutExtension(Name);
+
+    public string Extension => System.IO.Path.GetExtension(Name);
 }
