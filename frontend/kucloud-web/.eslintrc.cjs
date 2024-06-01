@@ -1,14 +1,14 @@
 module.exports = {
   extends: [
-    'mantine',
+    'plugin:prettier/recommended',
     'plugin:@next/next/recommended',
     'plugin:jest/recommended',
-    'plugin:prettier/recommended',
+    'mantine',
   ],
   plugins: [
+    'prettier',
     'testing-library',
     'jest',
-    'prettier',
   ],
   overrides: [
     {
@@ -20,8 +20,8 @@ module.exports = {
     project: './tsconfig.json',
   },
   rules: {
+    'prettier/prettier': 'error',
     'react/react-in-jsx-scope': 'off',
     'import/extensions': 'off',
-    'prettier/prettier': 'error',
   },
 };

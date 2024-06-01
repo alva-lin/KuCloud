@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { Button } from '@mantine/core';
+import { Button, Menu } from '@mantine/core';
 
 import UploadFileButton from '@/components/Folder/UploadFileButton';
 import { Api } from '@/lib/api';
@@ -57,8 +57,39 @@ export default function ToolBar(props: {
     <>
       <div className="flex justify-between items-center">
         <div className="flex gap-4 items-center">
-          <Button onClick={openCreateModal}>Add Folder</Button>
-          <UploadFileButton parentId={folder.id} />
+          <Menu position="bottom-start" withArrow arrowPosition="center">
+            <Menu.Target>
+              <Button>新增</Button>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Item
+                leftSection={
+                  <span
+                    className="i-fluent-folder-24-regular w-6 h-6"
+                    role="img"
+                    aria-hidden="true"
+                  />
+                }
+                onClick={openCreateModal}
+              >
+                新建文件夹
+              </Menu.Item>
+              <Menu.Divider />
+
+              <Menu.Item
+                leftSection={
+                  <span
+                    className="i-fluent-document-24-regular w-6 h-6"
+                    role="img"
+                    aria-hidden="true"
+                  />
+                }
+              >
+                <UploadFileButton parentId={folder.id}>{() => '上传文件'}</UploadFileButton>
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
           {singleSelection && firstSelection?.type === 'File' && (
             <Button onClick={download}>Download</Button>
           )}

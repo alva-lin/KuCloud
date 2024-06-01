@@ -1,12 +1,15 @@
 import React, { useCallback, useRef } from 'react';
 
-import { Button, FileButton } from '@mantine/core';
+import { FileButton } from '@mantine/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/lib/api';
 
-export default function UploadFileButton(props: { parentId: number }) {
-  const { parentId } = props;
+export default function UploadFileButton(props: {
+  parentId: number;
+  children: (props: { onClick: () => void }) => React.ReactNode;
+}) {
+  const { parentId, children } = props;
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -34,7 +37,7 @@ export default function UploadFileButton(props: { parentId: number }) {
 
   return (
     <FileButton resetRef={resetRef} onChange={uploadFile}>
-      {(iProps) => <Button {...iProps}>Upload File</Button>}
+      {children}
     </FileButton>
   );
 }

@@ -30,8 +30,10 @@ export default function CreateFolderForm(props: {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: Api.Storage.addFolder,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: Api.Storage.getFolderQueryKey({ id: folderId }) });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: Api.Storage.getFolderQueryKey({ id: folderId }),
+      });
       notifications.show({
         message: '创建成功',
         color: 'green',
