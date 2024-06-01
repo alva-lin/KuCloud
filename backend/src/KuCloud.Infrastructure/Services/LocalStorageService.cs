@@ -4,7 +4,7 @@ namespace KuCloud.Infrastructure.Services;
 
 public class LocalStorageService : IFileService
 {
-    private const string BasePath = "wwwroot/files";
+    private const string BasePath = "LocalStorage";
 
     private static void EnsureDirectory(string path)
     {
