@@ -11,8 +11,7 @@ public static class SeedData
     {
         using var dbContext = new AppDbContext(
             serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(),
-            serviceProvider.GetRequiredService<ILogger<AppDbContext>>(),
-            null
+            serviceProvider.GetRequiredService<ILogger<AppDbContext>>()
         );
         if (dbContext.Folders.Any()) return; // DB has been seeded
 
@@ -37,17 +36,11 @@ public static class SeedData
         var folder1 = new Folder("Folder1", folder);
         dbContext.Folders.Add(folder1);
 
+        var folder11 = new Folder("Folder1-1", folder1);
+        dbContext.Folders.Add(folder11);
+
         var folder2 = new Folder("Folder2", folder);
         dbContext.Folders.Add(folder2);
-
-        var file1 = new FileNode(folder1, "file1.txt", "text/plain", 0L);
-        dbContext.FileNodes.Add(file1);
-
-        var file2 = new FileNode(folder1, "file2.txt", "text/plain", 0L);
-        dbContext.FileNodes.Add(file2);
-
-        var file3 = new FileNode(folder2, "file3.txt", "text/plain", 0L);
-        dbContext.FileNodes.Add(file3);
 
         dbContext.SaveChanges();
     }
