@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using EFCore.NamingConventions.Internal;
-using KuCloud.Core;
 using KuCloud.Infrastructure.Data.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +12,10 @@ public static class AppDbContextExtensions
 {
     public static void AddApplicationDbContext(this IServiceCollection services, string connectionString)
     {
-        services.AddDbContext<AppDbContext>(options =>
+        services.AddScoped<SetAuditInfoInterceptor>();
+        services.AddScoped<DispatchAndClearEventsInterceptor>();
+
+        services.AddDbContext<AppDbContext>((provider, options) =>
             {
                 options.UseNpgsql(connectionString)
                     .UseSnakeCaseNamingConvention();
@@ -21,6 +23,11 @@ public static class AppDbContextExtensions
 #if DEBUG
                 options.EnableSensitiveDataLogging();
 #endif
+
+                options.AddInterceptors([
+                    provider.GetRequiredService<SetAuditInfoInterceptor>(),
+                    provider.GetRequiredService<DispatchAndClearEventsInterceptor>(),
+                ]);
             }
         );
     }

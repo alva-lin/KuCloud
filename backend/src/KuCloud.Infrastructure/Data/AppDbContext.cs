@@ -1,35 +1,19 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using SmartEnum.EFCore;
 
 namespace KuCloud.Infrastructure.Data;
 
-public sealed partial class AppDbContext : DbContext
+public sealed partial class AppDbContext(DbContextOptions<AppDbContext> options, ILogger<AppDbContext> logger)
+    : DbContext(options)
 {
-    private readonly ILogger<AppDbContext> _logger;
-    private readonly IDomainEventDispatcher? _dispatcher;
-
-    public AppDbContext(
-        DbContextOptions<AppDbContext> options,
-        ILogger<AppDbContext> logger,
-        IDomainEventDispatcher? dispatcher
-    ) : base(options)
-    {
-        _logger = logger;
-        _dispatcher = dispatcher;
-
-        ChangeTracker.StateChanged += UpdateAuditInfo;
-        ChangeTracker.Tracked += UpdateAuditInfo;
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyBasicEntityConfigurationsFromAssembly(
-            _logger,
+            logger,
             [
                 typeof(AppDbContext).Assembly,
                 typeof(BasicEntity<>).Assembly,
@@ -44,57 +28,5 @@ public sealed partial class AppDbContext : DbContext
         base.ConfigureConventions(configurationBuilder);
 
         configurationBuilder.ConfigureSmartEnum();
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
-    {
-        var result = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-
-        // ignore events if no dispatcher provided
-        if (_dispatcher == null) return result;
-
-        // dispatch events only if save was successful
-        var entitiesWithEvents = ChangeTracker.Entries<EntityBase>()
-            .Select(e => e.Entity)
-            .Where(e => e.DomainEvents.Any())
-            .ToArray();
-
-        await _dispatcher.DispatchAndClearEvents(entitiesWithEvents);
-
-        return result;
-    }
-
-    public override int SaveChanges()
-    {
-        return SaveChangesAsync().GetAwaiter().GetResult();
-    }
-
-    private static void UpdateAuditInfo(object? sender, EntityEntryEventArgs e)
-    {
-        if (e.Entry.Entity is not IAuditable entity) return;
-
-        var now = DateTime.UtcNow;
-        switch (e.Entry.State)
-        {
-            case EntityState.Deleted:
-                if (!entity.AuditInfo.IsDelete)
-                {
-                    entity.AuditInfo.SetDeleteInfo(now);
-                    e.Entry.State = EntityState.Modified;
-                }
-                break;
-            case EntityState.Modified:
-                entity.AuditInfo.SetModifyInfo(now);
-                break;
-            case EntityState.Added:
-                entity.AuditInfo.SetCreateInfo(now);
-                break;
-            case EntityState.Detached:
-                break;
-            case EntityState.Unchanged:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
     }
 }
