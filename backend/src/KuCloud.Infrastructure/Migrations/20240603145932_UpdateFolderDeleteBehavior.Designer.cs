@@ -3,6 +3,7 @@ using System;
 using KuCloud.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KuCloud.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240603145932_UpdateFolderDeleteBehavior")]
+    partial class UpdateFolderDeleteBehavior
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,7 +144,7 @@ namespace KuCloud.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_storage_nodes_folders_parent_id");
 
-                    b.OwnsOne("KuCloud.Core.Domains.StorageAggregate.StorageNode.AuditInfo#KuCloud.SharedKernel.AuditInfo", "AuditInfo", b1 =>
+                    b.OwnsOne("KuCloud.SharedKernel.AuditInfo", "AuditInfo", b1 =>
                         {
                             b1.Property<long>("StorageNodeId")
                                 .HasColumnType("bigint");
@@ -170,7 +173,7 @@ namespace KuCloud.Infrastructure.Migrations
 
                             b1.HasKey("StorageNodeId");
 
-                            b1.ToTable("storage_nodes", (string)null);
+                            b1.ToTable("storage_nodes");
 
                             b1.ToJson("audit_info");
 
