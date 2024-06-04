@@ -22,19 +22,15 @@ public sealed class RenameNodeHandler(
             return Result.NotFound("Node not found");
         }
 
-        if (node.Name == request.NewName)
+        var oldName = node.Name;
+        var newName = request.NewName.Trim();
+        if (oldName == newName)
         {
             logger.LogWarning("New name is same as old name");
             return Result.Conflict("New name is same as old name");
         }
 
-        var oldName = node.Name;
-
-        node.Name = request.NewName;
-        node.Parent?.CheckChildName(node, autoRename: true);
-
-        var newName = node.Name;
-
+        node.SetName(newName);
         await repos.UpdateAsync(node, ct);
 
         logger.LogInformation("Rename node [{Id}] {OldName} -> {NewName}", node.Id, oldName, newName);

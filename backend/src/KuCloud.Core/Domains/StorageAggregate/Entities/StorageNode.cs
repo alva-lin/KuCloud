@@ -8,26 +8,32 @@ public abstract class StorageNode : BasicEntity<long>, IAggregateRoot
     protected StorageNode(StorageType type, string name, Folder? parent)
     {
         Type = type;
-        Name = name;
 
+        SetName(name);
         SetParent(parent);
     }
 
-    public StorageType Type { get; set; } = null!;
+    public StorageType Type { get; protected set; } = null!;
 
-    private string _name = null!;
-
-    public string Name
-    {
-        get => _name;
-        set => _name = Guard.Against.CheckInvalidPath(value);
-    }
+    public string Name { get; protected set; } = null!;
 
     public Folder? Parent { get; private set; }
 
     public long? ParentId { get; set; }
 
     public bool IsRoot => Parent == null;
+
+    public void SetName(string name)
+    {
+        var newName = Guard.Against.CheckInvalidPath(name.Trim());
+        if (newName == Name)
+        {
+            return;
+        }
+
+        Name = newName;
+        Parent?.CheckChildName(this, autoRename: true);
+    }
 
     public void SetParent(Folder? parent)
     {

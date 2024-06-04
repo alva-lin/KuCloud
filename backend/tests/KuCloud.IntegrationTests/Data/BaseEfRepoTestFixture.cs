@@ -8,15 +8,14 @@ namespace KuCloud.IntegrationTests.Data;
 
 public abstract class BaseEfRepoTestFixture
 {
-    protected AppDbContext DbContext;
+    protected readonly AppDbContext DbContext;
 
     protected BaseEfRepoTestFixture()
     {
         var options = CreateNewContextOptions();
         var fakeLogger = Substitute.For<ILogger<AppDbContext>>();
-        var fakeEventDispatcher = Substitute.For<IDomainEventDispatcher>();
 
-        DbContext = new AppDbContext(options, fakeLogger, fakeEventDispatcher);
+        DbContext = new AppDbContext(options, fakeLogger);
     }
 
     protected static DbContextOptions<AppDbContext> CreateNewContextOptions()

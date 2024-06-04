@@ -101,7 +101,7 @@ public sealed class Folder_Tests : BasicTest
         var folder = CreateFolder();
         var brother = CreateFolder(folder);
         var child = CreateFolder();
-        child.Name = brother.Name;
+        child.SetName(brother.Name);
 
         child.SetParent(folder);
 

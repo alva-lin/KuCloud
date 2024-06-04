@@ -28,8 +28,9 @@ public sealed class Folder : StorageNode
     ///     The descendants of the folder, only include folders
     /// </summary>
     [NotMapped]
-    public IReadOnlyList<StorageNode> Descendants => _descendantRelations
-        .OrderBy(e => e.Depth).ThenBy(e => e.Descendant.Type.Value).ThenBy(e => e.Descendant.Id)
+    public IReadOnlyList<StorageNode> Descendants => _descendantRelations.OrderBy(e => e.Depth)
+        .ThenBy(e => e.Descendant.Type.Value)
+        .ThenBy(e => e.Descendant.Id)
         .Select(e => e.Descendant)
         .ToList()
         .AsReadOnly();
@@ -102,18 +103,19 @@ public sealed class Folder : StorageNode
 
     public void CheckChildName(StorageNode node, bool autoRename = false)
     {
-        var hasSameName = (StorageNode e) => e.Type == node.Type && e.Id != node.Id && e.Name == node.Name;
+        var otherNode = (StorageNode e) => e.Type == node.Type && e.Id != node.Id;
 
-        if (!_children.Any(hasSameName)) return;
+        if (_children.Where(otherNode).All(e => e.Name != node.Name)) return;
 
         if (!autoRename) throw new InvalidOperationException("The name already exists");
 
         var index = 1;
-        var originalName = node.Name;
-        while (_children.Any(hasSameName))
+        while (_children.Where(otherNode).Any(e => e.Name == node.Name.WithIndex(index)))
         {
-            node.Name = originalName.WithIndex(index++);
+            index += 1;
         }
+
+        node.SetName(node.Name.WithIndex(index));
     }
 
 
@@ -136,12 +138,7 @@ public sealed class Folder : StorageNode
     /// <param name="depth">深度</param>
     private void AddDescendantInner(Folder descendant, int depth)
     {
-        var relation = new FolderNesting()
-        {
-            Ancestor = this,
-            Descendant = descendant,
-            Depth = depth
-        };
+        var relation = new FolderNesting() { Ancestor = this, Descendant = descendant, Depth = depth };
 
         descendant.AddAncestors(relation);
         _descendantRelations.Add(relation);

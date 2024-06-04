@@ -29,7 +29,7 @@ public class EfRepositoryUpdate : BaseEfRepoTestFixture
 
         Assert.NotSame(folder, newFolder);
         var newName = Guid.NewGuid().ToString();
-        newFolder.Name = newName;
+        newFolder.SetName(newName);
 
         // Update the item
         await repository.UpdateAsync(newFolder);
