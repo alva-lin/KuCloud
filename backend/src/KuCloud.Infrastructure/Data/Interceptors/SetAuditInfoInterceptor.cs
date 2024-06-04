@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace KuCloud.Infrastructure.Data;
 
-internal sealed class SetAuditInfoInterceptor : SaveChangesInterceptor
+public sealed class SetAuditInfoInterceptor : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {

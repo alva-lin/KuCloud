@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace KuCloud.Infrastructure.Data;
 
-internal sealed class DispatchAndClearEventsInterceptor(IDomainEventDispatcher? dispatcher) : SaveChangesInterceptor
+public sealed class DispatchAndClearEventsInterceptor(IDomainEventDispatcher? dispatcher) : SaveChangesInterceptor
 {
     public override int SavedChanges(SaveChangesCompletedEventData eventData, int result)
     {

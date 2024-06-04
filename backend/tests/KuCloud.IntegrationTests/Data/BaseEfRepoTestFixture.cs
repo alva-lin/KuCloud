@@ -24,6 +24,9 @@ public abstract class BaseEfRepoTestFixture
         // InMemory database instance.
         var serviceProvider = new ServiceCollection()
             .AddEntityFrameworkInMemoryDatabase()
+            .AddScoped<IDomainEventDispatcher, FakeDomainEventDispatcher>()
+            .AddScoped<SetAuditInfoInterceptor>()
+            .AddScoped<DispatchAndClearEventsInterceptor>()
             .BuildServiceProvider();
 
         // Create a new options instance telling the context to use an
@@ -31,6 +34,11 @@ public abstract class BaseEfRepoTestFixture
         var builder = new DbContextOptionsBuilder<AppDbContext>();
         builder.UseInMemoryDatabase("KuCloud.IntegrationTests")
             .UseInternalServiceProvider(serviceProvider);
+
+        builder.AddInterceptors([
+            serviceProvider.GetRequiredService<SetAuditInfoInterceptor>(),
+            serviceProvider.GetRequiredService<DispatchAndClearEventsInterceptor>()
+        ]);
 
         return builder.Options;
     }
