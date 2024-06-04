@@ -37,6 +37,13 @@ internal sealed class SetAuditInfoInterceptor : SaveChangesInterceptor
                     auditable.AuditInfo.SetCreateInfo(now);
                     break;
                 case EntityState.Modified:
+                    var hasModified = entry.Properties
+                        .Where(p => p.IsModified)
+                        .Where(p => p.Metadata.Name != nameof(IAuditable.AuditInfo))
+                        .Any(
+                            propertyEntry => propertyEntry.OriginalValue != propertyEntry.CurrentValue
+                        );
+                    if (!hasModified) break;
                     auditable.AuditInfo.SetModifyInfo(now);
                     break;
                 case EntityState.Deleted:
